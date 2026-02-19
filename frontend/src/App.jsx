@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "./App.css";
 import { useHelper } from "./hooks/useHelper";
 import { setTokenInvalidCallback } from "./api/api";
@@ -9,17 +9,32 @@ import {
   Calendar,
   ChartColumnDecreasing,
   CircleUserRound,
+  Folder,
   House,
   LogOut,
   Menu,
   Settings,
 } from "lucide-react";
+import ToasterNotif from "./components/Toaster";
 
 function App() {
   const { isAuthenticated, logout, isTokenValid, markTokenInvalid } =
     useHelper();
   const navigate = useNavigate();
-  const [sidebar, setSidebar] = useState(false);
+  const [sidebar, setSidebar] = useState({});
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setSidebar(false);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     setTokenInvalidCallback(markTokenInvalid);
@@ -54,7 +69,7 @@ function App() {
     <main className="w-screen h-screen flex">
       <aside
         className="relative flex flex-col bg-white border-r border-gray-100 transition-all duration-300 ease-in-out overflow-hidden shrink-0"
-        style={{ width: sidebar ? "240px" : "56px" }}
+        style={{ width: sidebar ? "300px" : "56px" }}
       >
         {/* Header */}
         <div className="flex items-center h-14 px-3 border-b border-gray-100 shrink-0">
@@ -93,7 +108,11 @@ function App() {
                   Main
                 </span>
               )}
-              <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+              <div className={`${sidebar ? "mx-5" : ""} flex flex-col gap-3`}>
+              <Link
+                to={"/"}
+                className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
+              >
                 <House
                   size={17}
                   className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
@@ -103,7 +122,22 @@ function App() {
                     Dashboard
                   </span>
                 )}
-              </button>
+              </Link>
+
+              <Link
+                to={"/projects"}
+                className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
+              >
+                <Folder
+                  size={17}
+                  className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
+                />
+                {sidebar && (
+                  <span className="whitespace-nowrap font-medium">
+                    Projects
+                  </span>
+                )}
+              </Link>
               <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
                 <Calendar
                   size={17}
@@ -137,6 +171,7 @@ function App() {
                   </span>
                 )}
               </button>
+              </div>
             </div>
 
             {/* Section 2 */}
@@ -146,6 +181,7 @@ function App() {
                   System
                 </span>
               )}
+              <div className={`${sidebar ? "mx-5" : ""} flex flex-col gap-3`}>
               <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
                 <Settings
                   size={17}
@@ -157,6 +193,7 @@ function App() {
                   </span>
                 )}
               </button>
+              </div>
             </div>
           </div>
 
@@ -175,7 +212,11 @@ function App() {
         </div>
       </aside>
 
-      <section className="flex-1 overflow-auto" />
+      <section className="flex-1 overflow-auto p-2 sm:p-10">
+        <Outlet />
+      </section>
+
+      <ToasterNotif/>
     </main>
   );
 }

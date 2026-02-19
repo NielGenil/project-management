@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView
+
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -28,5 +30,10 @@ urlpatterns = [
 
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('api/project-list/', ProjectList.as_view(), name='project-list'),
+    path('api/project-create/', ProjectCreate.as_view(), name='project-create'),
+    path('api/project-update/<int:pk>/', ProjectRetriveUpdateDestroy.as_view(), name='project-update'),
+    path('api/project-status/', ProjectStatusChoicesView.as_view(), name='project-status'),
 
 ]
