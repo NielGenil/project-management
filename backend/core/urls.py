@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView
+from accounts.views import UserList, CurrentUserView
+
+from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView, TaskList, TaskCreate, TaskRetriveUpdateDestroy, TaskChoicesView, ProjectWithTaskList
 
 
 from rest_framework_simplejwt.views import (
@@ -31,9 +33,20 @@ urlpatterns = [
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
+    path('api/current-user/', CurrentUserView.as_view()),
+
+    path('api/user-list/', UserList.as_view(), name='user-list'),
+
     path('api/project-list/', ProjectList.as_view(), name='project-list'),
     path('api/project-create/', ProjectCreate.as_view(), name='project-create'),
-    path('api/project-update/<int:pk>/', ProjectRetriveUpdateDestroy.as_view(), name='project-update'),
+    path('api/project-edit/<int:pk>/', ProjectRetriveUpdateDestroy.as_view(), name='project-update'),
     path('api/project-status/', ProjectStatusChoicesView.as_view(), name='project-status'),
+
+    path("api/project-detail/<int:pk>/", ProjectWithTaskList.as_view()),
+
+    path('api/task-list/', TaskList.as_view(), name='task-list'),
+    path('api/task-create/', TaskCreate.as_view(), name='task-create'),
+    path('api/task-edit/<int:pk>/', TaskRetriveUpdateDestroy.as_view(), name='task-update'),
+    path('api/task-status-priority/', TaskChoicesView.as_view(), name='task-status-priority'),
 
 ]

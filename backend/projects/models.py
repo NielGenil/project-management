@@ -17,8 +17,9 @@ class Project(models.Model):
     project_status = models.CharField(max_length=50, choices=ProjectStatus.choices, default=ProjectStatus.PENDING)
     project_start = models.DateField(null=True, blank=True)
     project_end = models.DateField(null=True, blank=True)
+    project_members = models.ManyToManyField(CustomUser, blank=True, related_name='projects')
     created_at = models.DateTimeField(auto_now_add=True)
-
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='project_creator')
 
     def __str__(self):
         return self.project_name

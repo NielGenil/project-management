@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoginPage from "./pages/login.jsx";
 import ProjectPage from "./pages/projectPage.jsx";
 import DashboardPage from "./pages/dashboardPage.jsx";
+import TaskPage from "./pages/taskPage.jsx";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/projects",
         element: <ProjectPage />,
+      },
+      {
+        path: "/project/tasks/:projectId",
+        element: <TaskPage />,
       },
     ],
   },

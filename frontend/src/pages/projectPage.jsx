@@ -34,7 +34,7 @@ export default function ProjectPage() {
               }}
               className="bg-blue-500 text-white p-2 rounded-md flex gap-2 justify-center items-center"
             >
-              <FolderPlus className="text-white" size={18} /> Add Project
+              <FolderPlus className="text-white" size={18} /> Create Project
             </button>
           </div>
         </div>
