@@ -57,7 +57,11 @@ export default function AddProjectModal({ onClose }) {
         >
           <div className="flex flex-col gap-4">
             <input type="hidden" name="created_by" defaultValue={user?.id} />
-            <input type="hidden" name="project_members" defaultValue={user?.id} />
+            <input
+              type="hidden"
+              name="project_members"
+              defaultValue={user?.id}
+            />
             <div>
               <h1 className="text-md font-semibold">Title</h1>
               <input
@@ -124,6 +128,7 @@ export default function AddProjectModal({ onClose }) {
               Create
             </button>
             <button
+              type="button"
               onClick={onClose}
               className="py-2 px-4 border border-gray-300 rounded-md"
             >

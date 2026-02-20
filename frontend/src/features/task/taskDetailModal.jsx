@@ -43,13 +43,12 @@ export default function TaskDetailModal({ onClose, taskDetail, projectData }) {
     addTask(formData);
   };
 
-  console.log(taskDetail?.task_assign_user?.id);
   return (
     <main className="fixed z-50 bg-black/20 inset-0 flex justify-center items-center p-4">
       <div className="bg-white p-4 rounded-md shadow-2xl w-full max-w-lg">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h1 className="font-bold text-xl">Create New Task</h1>
+          <h1 className="font-bold text-xl">Task Detail</h1>
         </div>
 
         <form
@@ -57,7 +56,6 @@ export default function TaskDetailModal({ onClose, taskDetail, projectData }) {
           ref={addTaskRef}
           className="w-full flex flex-col gap-5"
         >
-
           <div className="flex flex-col gap-4">
             <div>
               <h1 className="text-md font-semibold">Title</h1>
@@ -150,6 +148,7 @@ export default function TaskDetailModal({ onClose, taskDetail, projectData }) {
               Create
             </button>
             <button
+              type="button"
               onClick={onClose}
               className="py-2 px-4 border border-gray-300 rounded-md"
             >

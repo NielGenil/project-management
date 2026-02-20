@@ -43,7 +43,6 @@ export default function AddTaskModal({ onClose, projectData }) {
     addTask(formData);
   };
 
-  console.log(allUser);
   return (
     <main className="fixed z-50 bg-black/20 inset-0 flex justify-center items-center p-4">
       <div className="bg-white p-4 rounded-md shadow-2xl w-full max-w-lg">
@@ -146,6 +145,7 @@ export default function AddTaskModal({ onClose, projectData }) {
               Create
             </button>
             <button
+              type="button"
               onClick={onClose}
               className="py-2 px-4 border border-gray-300 rounded-md"
             >
