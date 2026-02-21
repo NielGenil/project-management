@@ -132,7 +132,7 @@ export default function AddProjectModal({ onClose }) {
               onClick={onClose}
               className="py-2 px-4 border border-gray-300 rounded-md"
             >
-              Cancle
+              Cancel
             </button>
           </div>
         </form>

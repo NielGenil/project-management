@@ -48,7 +48,7 @@ export default function ProjectTable() {
               >
                 <td className="px-2 py-3">{project.project_name}</td>
                 <td className="px-2 py-3">
-                  <span className="flex gap-2">
+                  <span className="flex gap-2 items-center">
                     {project.project_status === "Active" ? (
                       <RefreshCcw
                         className="bg-green-100 text-green-500 p-1 rounded-lg"
@@ -76,13 +76,13 @@ export default function ProjectTable() {
                   </span>
                 </td>
                 <td className="px-2 py-3">
-                  <span className="flex gap-2">
+                  <span className="flex gap-2 items-center">
                     <CalendarCheck className="text-gray-500" size={18} />
                     {project.project_start}
                   </span>
                 </td>
                 <td className="px-2 py-3">
-                  <span className="flex gap-2">
+                  <span className="flex gap-2 items-center">
                     <CalendarMinus2 className="text-gray-500" size={18} />
                     {project.project_end}
                   </span>

@@ -1,16 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHelper } from "../../hooks/useHelper";
 import {
+  editTaskDataAPI,
   getAllUserAPI,
   getTaskStatusAPI,
-  postTaskAPI,
 } from "../../api/projectAPI";
 import { useRef } from "react";
 import { toast } from "react-hot-toast";
 
 export default function TaskDetailModal({ onClose, taskDetail, projectData }) {
   const { token } = useHelper();
-  const addTaskRef = useRef();
+  const editTaskRef = useRef();
   const queryClient = useQueryClient();
 
   const { data: taskStatus } = useQuery({
@@ -24,24 +24,35 @@ export default function TaskDetailModal({ onClose, taskDetail, projectData }) {
   });
 
   const { mutate: addTask } = useMutation({
-    mutationFn: (formData) => postTaskAPI(formData, token),
+    mutationFn: ({ formData, id }) => editTaskDataAPI(token, formData, id),
     onSuccess: () => {
-      toast.success("Task created successfully!");
+      toast.success("Task edited successfully!");
       queryClient.invalidateQueries(["task-list"]);
       onClose();
     },
     onError: (err) => {
       console.error(err);
-      toast.error("Failed to create task. Please try again.");
+      toast.error("Failed to edit task. Please try again.");
     },
   });
 
-  const createTask = (e) => {
+  const editTask = (e) => {
     e.preventDefault();
 
-    const formData = new FormData(addTaskRef.current);
-    addTask(formData);
+    const formData = new FormData(editTaskRef.current);
+
+    const id = taskDetail.id;
+    console.log(id);
+    addTask({ formData, id });
   };
+
+  if (!taskDetail || !taskStatus) {
+    return (
+      <main className="fixed z-50 bg-black/20 inset-0 flex justify-center items-center">
+        <div className="bg-white p-6 rounded-md shadow-xl">Loading...</div>
+      </main>
+    );
+  }
 
   return (
     <main className="fixed z-50 bg-black/20 inset-0 flex justify-center items-center p-4">
@@ -52,8 +63,8 @@ export default function TaskDetailModal({ onClose, taskDetail, projectData }) {
         </div>
 
         <form
-          onSubmit={createTask}
-          ref={addTaskRef}
+          onSubmit={editTask}
+          ref={editTaskRef}
           className="w-full flex flex-col gap-5"
         >
           <div className="flex flex-col gap-4">
@@ -152,7 +163,7 @@ export default function TaskDetailModal({ onClose, taskDetail, projectData }) {
               onClick={onClose}
               className="py-2 px-4 border border-gray-300 rounded-md"
             >
-              Cancle
+              Cancel
             </button>
           </div>
         </form>

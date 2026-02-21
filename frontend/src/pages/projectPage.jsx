@@ -42,7 +42,7 @@ export default function ProjectPage() {
 
       {/* second section */}
       <section className="w-full flex gap-4 flex-col sm:flex-row items-center justify-between">
-        <div className="flex w-full sm:w-[250px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[250px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Total Projects</p>
             <h1 className="text-2xl font-semibold">1</h1>
@@ -55,7 +55,7 @@ export default function ProjectPage() {
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[250px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[250px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Active Projects</p>
             <h1 className="text-2xl font-semibold">1</h1>
@@ -68,7 +68,7 @@ export default function ProjectPage() {
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[250px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[250px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Pending Projects</p>
             <h1 className="text-2xl font-semibold">1</h1>
@@ -81,7 +81,7 @@ export default function ProjectPage() {
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[250px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[250px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Overdue Projects</p>
             <h1 className="text-2xl font-semibold">1</h1>
@@ -94,7 +94,7 @@ export default function ProjectPage() {
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[250px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[250px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Completed Projects</p>
             <h1 className="text-2xl font-semibold">1</h1>
@@ -107,7 +107,7 @@ export default function ProjectPage() {
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[250px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[250px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Canceled Projects</p>
             <h1 className="text-2xl font-semibold">1</h1>

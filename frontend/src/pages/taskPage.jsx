@@ -3,9 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import { getProjectDataAPI } from "../api/projectAPI";
 import { useHelper } from "../hooks/useHelper";
 import {
+  ActivityIcon,
   ArrowLeft,
   Ban,
+  BookCheck,
+  BookType,
   CalendarX,
+  ClipboardCheck,
   ClipboardClock,
   FolderOpen,
   FolderPlus,
@@ -15,7 +19,7 @@ import {
 } from "lucide-react";
 import TaskTable from "../features/task/taskTable";
 import AddTaskModal from "../features/task/AddTaskModal";
-import { useState } from "react";
+import { Activity, useState } from "react";
 
 export default function TaskPage() {
   const { token } = useHelper();
@@ -64,26 +68,26 @@ export default function TaskPage() {
 
       {/* second section */}
       <section className="w-full flex gap-4 flex-col sm:flex-row items-center">
-        <div className="flex w-full sm:w-[300px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[300px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Total Task</p>
             <h1 className="text-2xl font-semibold">1</h1>
           </div>
           <div>
-            <FolderOpen
+            <BookType
               className="bg-yellow-100 text-yellow-500 p-1 rounded-lg"
               size={35}
             />
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[300px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[300px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">In Progress Task</p>
             <h1 className="text-2xl font-semibold">1</h1>
           </div>
           <div>
-            <RefreshCcw
+            <ActivityIcon
               className="bg-green-100 text-green-500 p-1 rounded-lg"
               size={35}
             />
@@ -91,20 +95,20 @@ export default function TaskPage() {
         </div>
 
 
-        <div className="flex w-full sm:w-[300px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[300px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Completed Task</p>
             <h1 className="text-2xl font-semibold">1</h1>
           </div>
           <div>
-            <SquareCheckBig
+            <ClipboardCheck
               className="bg-blue-100 text-blue-500 p-1 rounded-lg"
               size={35}
             />
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[300px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full sm:w-[300px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Total Member</p>
             <h1 className="text-2xl font-semibold">1</h1>

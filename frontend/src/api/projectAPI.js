@@ -129,3 +129,18 @@ export const getTaskDataAPI = async (token, id) => {
 
   return await response.json();
 };
+
+export const editTaskDataAPI = async (token, formData, id) => {
+  const response = await fetch(`${BASE_URL}/api/task-edit/${id}/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+  if (!response.ok) {
+    throw await response.json();
+  }
+
+  return await response.json();
+};
