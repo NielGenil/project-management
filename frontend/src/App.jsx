@@ -100,7 +100,7 @@ function App() {
 
         {/* Nav */}
         <div className="flex flex-col flex-1 justify-between py-4 overflow-hidden">
-          <div className="flex flex-col gap-6 px-2">
+          <div className="flex flex-col gap-6 px-2 overflow-y-auto">
             {/* Section 1 */}
             <div className="flex flex-col gap-1">
               {sidebar && (
@@ -109,68 +109,68 @@ function App() {
                 </span>
               )}
               <div className={`${sidebar ? "mx-5" : ""} flex flex-col gap-3`}>
-              <Link
-                to={"/"}
-                className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
-              >
-                <House
-                  size={17}
-                  className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
-                />
-                {sidebar && (
-                  <span className="whitespace-nowrap font-medium">
-                    Dashboard
-                  </span>
-                )}
-              </Link>
+                <Link
+                  to={"/"}
+                  className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
+                >
+                  <House
+                    size={17}
+                    className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
+                  />
+                  {sidebar && (
+                    <span className="whitespace-nowrap font-medium">
+                      Dashboard
+                    </span>
+                  )}
+                </Link>
 
-              <Link
-                to={"/projects"}
-                className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
-              >
-                <Folder
-                  size={17}
-                  className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
-                />
-                {sidebar && (
-                  <span className="whitespace-nowrap font-medium">
-                    Projects
-                  </span>
-                )}
-              </Link>
-              <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
-                <Calendar
-                  size={17}
-                  className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
-                />
-                {sidebar && (
-                  <span className="whitespace-nowrap font-medium">
-                    Calendar
-                  </span>
-                )}
-              </button>
-              <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
-                <Bell
-                  size={17}
-                  className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
-                />
-                {sidebar && (
-                  <span className="whitespace-nowrap font-medium">
-                    Notifications
-                  </span>
-                )}
-              </button>
-              <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
-                <ChartColumnDecreasing
-                  size={17}
-                  className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
-                />
-                {sidebar && (
-                  <span className="whitespace-nowrap font-medium">
-                    Analytics
-                  </span>
-                )}
-              </button>
+                <Link
+                  to={"/projects"}
+                  className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
+                >
+                  <Folder
+                    size={17}
+                    className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
+                  />
+                  {sidebar && (
+                    <span className="whitespace-nowrap font-medium">
+                      Projects
+                    </span>
+                  )}
+                </Link>
+                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+                  <Calendar
+                    size={17}
+                    className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
+                  />
+                  {sidebar && (
+                    <span className="whitespace-nowrap font-medium">
+                      Calendar
+                    </span>
+                  )}
+                </button>
+                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+                  <Bell
+                    size={17}
+                    className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
+                  />
+                  {sidebar && (
+                    <span className="whitespace-nowrap font-medium">
+                      Notifications
+                    </span>
+                  )}
+                </button>
+                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+                  <ChartColumnDecreasing
+                    size={17}
+                    className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
+                  />
+                  {sidebar && (
+                    <span className="whitespace-nowrap font-medium">
+                      Analytics
+                    </span>
+                  )}
+                </button>
               </div>
             </div>
 
@@ -182,17 +182,17 @@ function App() {
                 </span>
               )}
               <div className={`${sidebar ? "mx-5" : ""} flex flex-col gap-3`}>
-              <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
-                <Settings
-                  size={17}
-                  className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
-                />
-                {sidebar && (
-                  <span className="whitespace-nowrap font-medium">
-                    Settings
-                  </span>
-                )}
-              </button>
+                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+                  <Settings
+                    size={17}
+                    className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
+                  />
+                  {sidebar && (
+                    <span className="whitespace-nowrap font-medium">
+                      Settings
+                    </span>
+                  )}
+                </button>
               </div>
             </div>
           </div>
@@ -216,7 +216,7 @@ function App() {
         <Outlet />
       </section>
 
-      <ToasterNotif/>
+      <ToasterNotif />
     </main>
   );
 }

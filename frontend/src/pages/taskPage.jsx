@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import { getProjectDataAPI } from "../api/projectAPI";
 import { useHelper } from "../hooks/useHelper";
 import {
@@ -32,7 +32,7 @@ export default function TaskPage() {
   });
 
   return (
-    <main className="flex flex-col gap-10 w-full h-full sm:px-10">
+    <main className="flex flex-col gap-10 sm:px-10">
       {/* first section */}
       <section className="w-full">
         <div className="flex sm:flex-row flex-col flex-1 justify-between items-center gap-4">
@@ -124,7 +124,7 @@ export default function TaskPage() {
 
       {/* third section */}
       <section className="flex w-full h-full">
-        <TaskTable projectId={projectId} projectData={projectData}/>
+        <Outlet  context={{ projectId, projectData }}/>
       </section>
 
       {addTaskModal && (

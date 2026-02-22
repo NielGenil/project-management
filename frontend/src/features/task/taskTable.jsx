@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useHelper } from "../../hooks/useHelper";
-import { getAllProjectAPI, getTaskDataAPI } from "../../api/projectAPI";
+import { getProjectDataAPI, getTaskDataAPI } from "../../api/projectAPI";
 import {
   ActivityIcon,
   ActivitySquare,
@@ -9,20 +9,29 @@ import {
   CalendarCheck,
   CalendarMinus2,
   CalendarX,
+  Clipboard,
   ClipboardCheck,
   ClipboardClock,
   Layers,
   Layers2,
   LayersPlus,
   RefreshCcw,
+  Settings,
   SquareCheckBig,
+  SquareX,
   User,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import { useState } from "react";
 import TaskDetailModal from "./taskDetailModal";
 
-export default function TaskTable({ projectId, projectData }) {
+export default function TaskTable() {
+  const { projectId } = useParams();
   const { token } = useHelper();
   const navigate = useNavigate();
   const [taskDetailModal, setTaskDetailModal] = useState(false);
@@ -31,11 +40,15 @@ export default function TaskTable({ projectId, projectData }) {
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
   const [userFilter, setUserFilter] = useState("0");
-  const [clearFilterBtn, setClearFilterBtn] = useState({});
 
   const { data: taskList } = useQuery({
     queryKey: ["task-list"],
     queryFn: () => getTaskDataAPI(token, projectId),
+  });
+
+  const { data: projectData } = useQuery({
+    queryKey: ["project-data"],
+    queryFn: () => getProjectDataAPI(token, projectId),
   });
 
   const taskListData = Array.isArray(taskList?.tasks) ? taskList?.tasks : [];
@@ -57,67 +70,83 @@ export default function TaskTable({ projectId, projectData }) {
     return matchStatus && matchPriority && matchUser;
   });
 
-  const clearFilter = (e) => {
-    e.preventDefault();
-    setPriorityFilter("");
-    setStatusFilter("");
-    setUserFilter("0");
-  };
-
-  console.log(userFilter);
+  console.log(projectId);
 
   return (
     <main className="w-full h-full">
-      <div className="flex gap-4 mb-2">
-        <div className="">
-          <select
-            value={userFilter}
-            onChange={(e) => setUserFilter(e.target.value)}
-            className="p-2 font-semibold text-gray-700 border-gray-300 bg-white border rounded-md w-full"
-          >
-            <option value="0">All User</option>
-            {projectMembers?.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.username}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="p-2 text-gray-700 font-semibold border-gray-300 bg-white border rounded-md w-full"
-          >
-            <option value="">All Status</option>
-            <option value="To Do">To Do</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Done">Done</option>
-          </select>
-        </div>
+      <div className="flex justify-between items-center mb-2 flex-row-reverse">
+        <div className="flex gap-4">
+          {(priorityFilter !== "" ||
+            statusFilter !== "" ||
+            userFilter !== "0") && (
+              <button
+                onClick={() => {
+                  setPriorityFilter("");
+                  setStatusFilter("");
+                  setUserFilter("0");
+                }}
+                className="text-gray-700 flex gap-2 items-center"
+              >
+                <SquareX size={18} />
+                Clear
+              </button>
+            )}
+          <div className="">
+            <select
+              value={userFilter}
+              onChange={(e) => setUserFilter(e.target.value)}
+              className="p-2 font-semibold text-gray-700 border-gray-300 bg-white border rounded-md w-full"
+            >
+              <option value="0">All User</option>
+              {projectMembers?.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.username}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="">
-          <select
-            value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
-            className="p-2 font-semibold text-gray-700 border-gray-300 bg-white border rounded-md w-full"
-          >
-            <option value="">All Priority</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </div>
+          <div>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="p-2 text-gray-700 font-semibold border-gray-300 bg-white border rounded-md w-full"
+            >
+              <option value="">All Status</option>
+              <option value="To Do">To Do</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+          </div>
 
-        <button
-          onClick={() => {
-            setPriorityFilter("");
-            setStatusFilter("");
-            setUserFilter("0");
-          }}
-        >
-          Clear
-        </button>
+          <div className="">
+            <select
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+              className="p-2 font-semibold text-gray-700 border-gray-300 bg-white border rounded-md w-full"
+            >
+              <option value="">All Priority</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+          
+        </div>
+        <div className="flex items-center">
+          <button className="flex gap-2 items-center p-1.5 border border-gray-300 border-r-0 rounded-l-md bg-blue-500 text-white">
+            <Clipboard size={18} className="text-white" />
+            Task
+          </button>
+
+          <button
+            onClick={() => navigate(`/project/tasks/${projectId}/settings`)}
+            className="flex gap-2 items-center p-1.5 border border-gray-300 rounded-r-md text-gray-700"
+          >
+            <Settings size={18} className="text-gray-700" />
+            Settings
+          </button>
+        </div>
       </div>
       <div className="bg-white border-2 border-gray-200 rounded-md overflow-hidden overflow-x-auto w-full">
         <table className="w-full">

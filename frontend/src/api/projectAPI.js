@@ -87,6 +87,21 @@ export const getProjectDataAPI = async (token, id) => {
   return await response.json();
 };
 
+export const editProjectDataAPI = async (token, formData, id) => {
+  const response = await fetch(`${BASE_URL}/api/project-edit/${id}/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+  if (!response.ok) {
+    throw await response.json();
+  }
+
+  return await response.json();
+};
+
 export const getTaskStatusAPI = async (token) => {
   const response = await fetch(`${BASE_URL}/api/task-status-priority/`, {
     method: "GET",

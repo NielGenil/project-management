@@ -15,7 +15,7 @@ import ProjectTable from "../features/project/ProjectTable";
 export default function ProjectPage() {
   const [addProjectModal, setAddProjectModal] = useState(false);
   return (
-    <main className="flex flex-col gap-10 w-full h-full sm:px-10">
+    <main className="flex flex-col gap-10 sm:px-10  overflow-auto">
       {/* first section */}
       <section className="w-full">
         <div className="flex sm:flex-row flex-col flex-1 justify-between items-center gap-4">

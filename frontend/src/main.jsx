@@ -8,6 +8,8 @@ import LoginPage from "./pages/login.jsx";
 import ProjectPage from "./pages/projectPage.jsx";
 import DashboardPage from "./pages/dashboardPage.jsx";
 import TaskPage from "./pages/taskPage.jsx";
+import TaskTable from "./features/task/taskTable.jsx";
+import ProjectSettings from "./features/project/projectSettings.jsx";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <DashboardPage/>,
+        element: <DashboardPage />,
       },
       {
         path: "/projects",
@@ -27,6 +29,16 @@ const router = createBrowserRouter([
       {
         path: "/project/tasks/:projectId",
         element: <TaskPage />,
+        children: [
+          {
+            path: "/project/tasks/:projectId",
+            element: <TaskTable />,
+          },
+          {
+            path: "/project/tasks/:projectId/settings",
+            element: <ProjectSettings />,
+          },
+        ],
       },
     ],
   },
