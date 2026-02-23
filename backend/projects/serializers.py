@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Project, Task
+from accounts.models import CustomUser
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +12,27 @@ class ProjectEditSerializer(serializers.ModelSerializer):
         model = Project
         fields = '__all__'
         depth = 1
+
+# serializers.py
+class AddProjectMemberSerializer(serializers.ModelSerializer):
+    project_members = serializers.PrimaryKeyRelatedField(
+        queryset=CustomUser.objects.all(),
+        many=True,
+        required=False
+    )
+
+    class Meta:
+        model = Project
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        members = validated_data.pop('project_members', None)
+        instance = super().update(instance, validated_data)
+
+        if members is not None:
+            instance.project_members.set(members)
+
+        return instance
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:

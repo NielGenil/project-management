@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHelper } from "../../hooks/useHelper";
 import {
   editTaskDataAPI,
-  getAllUserAPI,
   getTaskStatusAPI,
 } from "../../api/projectAPI";
 import { useRef } from "react";
@@ -16,11 +15,6 @@ export default function TaskDetailModal({ onClose, taskDetail, projectData }) {
   const { data: taskStatus } = useQuery({
     queryKey: ["task-status"],
     queryFn: () => getTaskStatusAPI(token),
-  });
-
-  const { data: allUser } = useQuery({
-    queryKey: ["all-user"],
-    queryFn: () => getAllUserAPI(token),
   });
 
   const { mutate: addTask } = useMutation({

@@ -19,7 +19,7 @@ from django.urls import path
 
 from accounts.views import UserList, CurrentUserView
 
-from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView, TaskList, TaskCreate, TaskRetriveUpdateDestroy, TaskChoicesView, ProjectWithTaskList
+from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView, TaskList, TaskCreate, TaskRetriveUpdateDestroy, TaskChoicesView, ProjectWithTaskList, AddProjectMemberRetriveUpdateDestroy, TaskBulkDelete
 
 
 from rest_framework_simplejwt.views import (
@@ -40,6 +40,7 @@ urlpatterns = [
     path('api/project-list/', ProjectList.as_view(), name='project-list'),
     path('api/project-create/', ProjectCreate.as_view(), name='project-create'),
     path('api/project-edit/<int:pk>/', ProjectRetriveUpdateDestroy.as_view(), name='project-update'),
+    path('api/add-project-member/<int:pk>/', AddProjectMemberRetriveUpdateDestroy.as_view(), name='project-update'),
     path('api/project-status/', ProjectStatusChoicesView.as_view(), name='project-status'),
 
     path("api/project-detail/<int:pk>/", ProjectWithTaskList.as_view()),
@@ -48,5 +49,7 @@ urlpatterns = [
     path('api/task-create/', TaskCreate.as_view(), name='task-create'),
     path('api/task-edit/<int:pk>/', TaskRetriveUpdateDestroy.as_view(), name='task-update'),
     path('api/task-status-priority/', TaskChoicesView.as_view(), name='task-status-priority'),
+
+    path('api/task-bulk-delete/', TaskBulkDelete.as_view(), name='task-bulk-delete'),
 
 ]

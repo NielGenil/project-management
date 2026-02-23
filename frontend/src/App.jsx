@@ -68,11 +68,11 @@ function App() {
   return (
     <main className="w-screen h-screen flex">
       <aside
-        className="relative flex flex-col bg-white border-r border-gray-100 transition-all duration-300 ease-in-out overflow-hidden shrink-0"
+        className="relative flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden shrink-0"
         style={{ width: sidebar ? "300px" : "56px" }}
       >
         {/* Header */}
-        <div className="flex items-center h-14 px-3 border-b border-gray-100 shrink-0">
+        <div className="flex items-center h-14 px-3 border-b border-gray-200 shrink-0">
           {sidebar ? (
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2 overflow-hidden">
@@ -100,7 +100,7 @@ function App() {
 
         {/* Nav */}
         <div className="flex flex-col flex-1 justify-between py-4 overflow-hidden">
-          <div className="flex flex-col gap-6 px-2 overflow-y-auto">
+          <div className="flex flex-col gap-6 px-2 overflow-y-auto overflow-hidden">
             {/* Section 1 */}
             <div className="flex flex-col gap-1">
               {sidebar && (

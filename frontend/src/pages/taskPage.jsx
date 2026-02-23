@@ -67,8 +67,8 @@ export default function TaskPage() {
       </section>
 
       {/* second section */}
-      <section className="w-full flex gap-4 flex-col sm:flex-row items-center">
-        <div className="flex w-full sm:w-[300px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
+      <section className="w-full flex gap-4 flex-col sm:flex-row sm:flex-wrap items-center">
+        <div className="flex w-full flex-1 sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Total Task</p>
             <h1 className="text-2xl font-semibold">1</h1>
@@ -81,7 +81,7 @@ export default function TaskPage() {
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[300px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full flex-1 sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">In Progress Task</p>
             <h1 className="text-2xl font-semibold">1</h1>
@@ -95,7 +95,7 @@ export default function TaskPage() {
         </div>
 
 
-        <div className="flex w-full sm:w-[300px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full flex-1 sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Completed Task</p>
             <h1 className="text-2xl font-semibold">1</h1>
@@ -108,7 +108,7 @@ export default function TaskPage() {
           </div>
         </div>
 
-        <div className="flex w-full sm:w-[300px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
+        <div className="flex w-full flex-1 sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
           <div>
             <p className="text-gray-500 text-sm">Total Member</p>
             <h1 className="text-2xl font-semibold">1</h1>

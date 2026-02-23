@@ -102,6 +102,39 @@ export const editProjectDataAPI = async (token, formData, id) => {
   return await response.json();
 };
 
+export const deleteProjectAPI = async (token, id) => {
+  const response = await fetch(`${BASE_URL}/api/project-edit/${id}/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw errorData;
+  }
+
+  return true;
+};
+
+export const addProjectMemberAPI = async (token, data, id) => {
+  const response = await fetch(`${BASE_URL}/api/add-project-member/${id}/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw await response.json();
+  }
+  console.log(data);
+
+  return await response.json();
+};
+
 export const getTaskStatusAPI = async (token) => {
   const response = await fetch(`${BASE_URL}/api/task-status-priority/`, {
     method: "GET",
@@ -158,4 +191,20 @@ export const editTaskDataAPI = async (token, formData, id) => {
   }
 
   return await response.json();
+};
+
+export const deleteTaskAPI = async (token, ids) => {
+  const response = await fetch(`${BASE_URL}/api/task-bulk-delete/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ids }),
+  });
+  if (!response.ok) {
+    throw await response.json();
+  }
+
+  return
 };

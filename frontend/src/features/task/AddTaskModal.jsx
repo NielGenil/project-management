@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHelper } from "../../hooks/useHelper";
 import {
-  getAllUserAPI,
   getTaskStatusAPI,
   postTaskAPI,
 } from "../../api/projectAPI";
@@ -13,14 +12,10 @@ export default function AddTaskModal({ onClose, projectData }) {
   const addTaskRef = useRef();
   const queryClient = useQueryClient();
 
+
   const { data: taskStatus } = useQuery({
     queryKey: ["task-status"],
     queryFn: () => getTaskStatusAPI(token),
-  });
-
-  const { data: allUser } = useQuery({
-    queryKey: ["all-user"],
-    queryFn: () => getAllUserAPI(token),
   });
 
   const { mutate: addTask } = useMutation({
@@ -154,6 +149,8 @@ export default function AddTaskModal({ onClose, projectData }) {
           </div>
         </form>
       </div>
+
+
     </main>
   );
 }
