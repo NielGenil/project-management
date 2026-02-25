@@ -87,8 +87,11 @@ class ProjectWithTaskList(generics.RetrieveAPIView):
     def get_queryset(self):
         user = self.request.user
 
-        # Projects user belongs to
-        projects = Project.objects.filter(members__user=user).distinct()
+        # Admin sees all projects
+        if user.is_superuser or user.is_staff:
+            projects = Project.objects.all()
+        else:
+            projects = Project.objects.filter(members__user=user).distinct()
 
         # Team Leader projects
         leader_project_ids = ProjectMembership.objects.filter(
@@ -99,20 +102,15 @@ class ProjectWithTaskList(generics.RetrieveAPIView):
         # ADMIN → all tasks
         if user.is_superuser or user.is_staff:
             tasks_qs = Task.objects.all()
-
         else:
-            # Leader → all tasks in their projects
             leader_tasks = Task.objects.filter(project_id__in=leader_project_ids)
-
-            # Member → only assigned tasks
             member_tasks = Task.objects.filter(task_assign_user=user)
-
-            # Combine leader + member tasks
             tasks_qs = leader_tasks | member_tasks
 
         return projects.prefetch_related(
             Prefetch("tasks", queryset=tasks_qs, to_attr="user_tasks")
         )
+
 
 class TaskBulkDelete(generics.GenericAPIView):
     queryset = Task.objects.all()
