@@ -19,7 +19,7 @@ from django.urls import path
 
 from accounts.views import UserList, CurrentUserView
 
-from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView, TaskList, TaskCreate, TaskRetriveUpdateDestroy, TaskChoicesView, ProjectWithTaskList, AddProjectMemberRetriveUpdateDestroy, TaskBulkDelete
+from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView, TaskCreate, TaskRetriveUpdateDestroy, TaskChoicesView, ProjectWithTaskList, TaskBulkDelete, ProjectMemberRolesChoicesView, ProjectMemberCreate, ProjectMemberRetriveUpdateDestroy, ProjectWithMemberList
 
 
 from rest_framework_simplejwt.views import (
@@ -40,12 +40,15 @@ urlpatterns = [
     path('api/project-list/', ProjectList.as_view(), name='project-list'),
     path('api/project-create/', ProjectCreate.as_view(), name='project-create'),
     path('api/project-edit/<int:pk>/', ProjectRetriveUpdateDestroy.as_view(), name='project-update'),
-    path('api/add-project-member/<int:pk>/', AddProjectMemberRetriveUpdateDestroy.as_view(), name='project-update'),
     path('api/project-status/', ProjectStatusChoicesView.as_view(), name='project-status'),
 
-    path("api/project-detail/<int:pk>/", ProjectWithTaskList.as_view()),
+    path('api/project-member-create/', ProjectMemberCreate.as_view(), name='project-member-create'),
+    path('api/project-member-edit/<int:pk>/', ProjectMemberRetriveUpdateDestroy.as_view(), name='project-member-update'),
+    path('api/project-roles/', ProjectMemberRolesChoicesView.as_view(), name='project-roles'),
 
-    path('api/task-list/', TaskList.as_view(), name='task-list'),
+    path("api/project-detail/<int:pk>/", ProjectWithTaskList.as_view()),
+    path("api/project-member-detail/<int:pk>/", ProjectWithMemberList.as_view()),
+
     path('api/task-create/', TaskCreate.as_view(), name='task-create'),
     path('api/task-edit/<int:pk>/', TaskRetriveUpdateDestroy.as_view(), name='task-update'),
     path('api/task-status-priority/', TaskChoicesView.as_view(), name='task-status-priority'),

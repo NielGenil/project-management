@@ -1,22 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHelper } from "../../hooks/useHelper";
 import {
+  getProjectMembersAPI,
   getTaskStatusAPI,
   postTaskAPI,
 } from "../../api/projectAPI";
 import { useRef } from "react";
 import { toast } from "react-hot-toast";
 
-export default function AddTaskModal({ onClose, projectData }) {
+export default function AddTaskModal({ onClose, projectData, projectId }) {
   const { token } = useHelper();
   const addTaskRef = useRef();
   const queryClient = useQueryClient();
-
 
   const { data: taskStatus } = useQuery({
     queryKey: ["task-status"],
     queryFn: () => getTaskStatusAPI(token),
   });
+
+  const { data: memberList } = useQuery({
+    queryKey: ["project-member"],
+    queryFn: () => getProjectMembersAPI(token, projectId),
+  });
+
+  const memberListData = Array.isArray(memberList?.members)
+    ? memberList?.members
+    : [];
 
   const { mutate: addTask } = useMutation({
     mutationFn: (formData) => postTaskAPI(formData, token),
@@ -80,9 +89,9 @@ export default function AddTaskModal({ onClose, projectData }) {
                   required
                 >
                   <option value="">Assign user</option>
-                  {projectData?.project_members?.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {user?.username}
+                  {memberListData?.map((user) => (
+                    <option key={user.id} value={user.user.id}>
+                      {user?.user?.username}
                     </option>
                   ))}
                 </select>
@@ -100,22 +109,6 @@ export default function AddTaskModal({ onClose, projectData }) {
 
             <div className="w-full flex gap-4 flex-wrap">
               <div className="flex-1">
-                <h1 className="text-md font-semibold">Status</h1>
-                <select
-                  name="task_status"
-                  className="p-2 border-gray-300 border rounded-md w-full"
-                  required
-                >
-                  <option value="">Set Task Status</option>
-                  {taskStatus?.statuses?.map(([value]) => (
-                    <option key={value} value={value}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex-1">
                 <h1 className="text-md font-semibold">Priority</h1>
                 <select
                   name="task_priority"
@@ -124,6 +117,21 @@ export default function AddTaskModal({ onClose, projectData }) {
                 >
                   <option value="">Set Task Priority</option>
                   {taskStatus?.priority?.map(([value]) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex-1">
+                <h1 className="text-md font-semibold">Status</h1>
+                <select
+                  name="task_status"
+                  className="p-2 border-gray-300 border rounded-md w-full"
+                  required
+                >
+                  <option value="">Set Task Status</option>
+                  {taskStatus?.statuses?.map(([value]) => (
                     <option key={value} value={value}>
                       {value}
                     </option>
@@ -149,8 +157,6 @@ export default function AddTaskModal({ onClose, projectData }) {
           </div>
         </form>
       </div>
-
-
     </main>
   );
 }

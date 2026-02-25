@@ -44,6 +44,35 @@ export const getProjectStatusAPI = async (token) => {
   return await response.json();
 };
 
+export const getProjectMemberRoleAPI = async (token) => {
+  const response = await fetch(`${BASE_URL}/api/project-roles/`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw await response.json();
+  }
+
+  return await response.json();
+};
+
+export const postProjectMemberAPI = async (token, formData) => {
+  const response = await fetch(`${BASE_URL}/api/project-member-create/`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+  if (!response.ok) {
+    throw await response.json();
+  }
+
+  return await response.json();
+};
+
 export const postProjectAPI = async (formData, token) => {
   const response = await fetch(`${BASE_URL}/api/project-create/`, {
     method: "POST",
@@ -117,22 +146,21 @@ export const deleteProjectAPI = async (token, id) => {
   return true;
 };
 
-export const addProjectMemberAPI = async (token, data, id) => {
-  const response = await fetch(`${BASE_URL}/api/add-project-member/${id}/`, {
-    method: "PATCH",
+export const removeProjectMemberAPI = async (token, id) => {
+  const response = await fetch(`${BASE_URL}/api/project-member-edit/${id}/`, {
+    method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    throw await response.json();
+ if (!response.ok) {
+    const errorData = await response.json();
+    throw errorData;
   }
-  console.log(data);
 
-  return await response.json();
+
+  return true;
 };
 
 export const getTaskStatusAPI = async (token) => {
@@ -178,6 +206,20 @@ export const getTaskDataAPI = async (token, id) => {
   return await response.json();
 };
 
+export const getProjectMembersAPI = async (token, id) => {
+  const response = await fetch(`${BASE_URL}/api/project-member-detail/${id}/`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw await response.json();
+  }
+
+  return await response.json();
+};
+
 export const editTaskDataAPI = async (token, formData, id) => {
   const response = await fetch(`${BASE_URL}/api/task-edit/${id}/`, {
     method: "PATCH",
@@ -189,6 +231,9 @@ export const editTaskDataAPI = async (token, formData, id) => {
   if (!response.ok) {
     throw await response.json();
   }
+  // const res = await response.json();
+
+  // console.log("data", res);
 
   return await response.json();
 };
@@ -206,5 +251,5 @@ export const deleteTaskAPI = async (token, ids) => {
     throw await response.json();
   }
 
-  return
+  return;
 };

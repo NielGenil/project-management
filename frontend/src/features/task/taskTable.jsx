@@ -30,10 +30,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import TaskDetailModal from "./taskDetailModal";
 import toast from "react-hot-toast";
+import { usePermission } from "../../hooks/usePermission";
 
 export default function TaskTable() {
   const { projectId } = useParams();
   const { token } = useHelper();
+  const { isTeamLeader } = usePermission();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [taskDetailModal, setTaskDetailModal] = useState(false);
@@ -92,6 +94,16 @@ export default function TaskTable() {
     deleteSelectedTask(selectedTasksIds);
   };
 
+  // console.log(taskList);
+
+    if (!taskListData) {
+    return (
+      <main className="fixed z-50 bg-black/20 inset-0 flex justify-center items-center">
+        <div className="bg-white p-6 rounded-md shadow-xl">Loading...</div>
+      </main>
+    );
+  }
+
   return (
     <main className="w-full h-full">
       <div className="flex justify-between items-center mb-2 gap-2 flex-wrap">
@@ -111,20 +123,22 @@ export default function TaskTable() {
         </div>
         <div className="flex flex-wrap gap-1 sm:gap-4 items-center sm:flex-row-reverse">
           <div className="flex flex-wrap gap-1 sm:gap-4">
-            <div className="">
-              <select
-                value={userFilter}
-                onChange={(e) => setUserFilter(e.target.value)}
-                className="p-1.5 font-semibold text-gray-700 border-gray-300 bg-white border rounded-md w-full"
-              >
-                <option value="0">All User</option>
-                {projectMembers?.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.username}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {isTeamLeader && (
+              <div className="">
+                <select
+                  value={userFilter}
+                  onChange={(e) => setUserFilter(e.target.value)}
+                  className="p-1.5 font-semibold text-gray-700 border-gray-300 bg-white border rounded-md w-full"
+                >
+                  <option value="0">All User</option>
+                  {projectMembers?.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.username}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div>
               <select
@@ -315,6 +329,7 @@ export default function TaskTable() {
           onClose={() => setTaskDetailModal(false)}
           taskDetail={taskData}
           projectData={projectData}
+          projectId={projectId}
         />
       )}
 

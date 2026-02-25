@@ -23,6 +23,23 @@ class Project(models.Model):
 
     def __str__(self):
         return self.project_name
+
+class ProjectMembership(models.Model):
+    class ProjectMembershipChoices(models.TextChoices):
+        LEADER = 'Team Leader'
+        MEMBER = 'Member'
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_member')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='members')
+    role = models.CharField(max_length=20, choices=ProjectMembershipChoices.choices, default=ProjectMembershipChoices.MEMBER)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'project'], name='unique_user_project')
+        ]
+
+    def __str__(self):
+        return f"{self.project.project_name} - {self.user.username}"
     
 class Task(models.Model):
      

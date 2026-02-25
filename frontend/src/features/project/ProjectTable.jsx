@@ -56,12 +56,12 @@ export default function ProjectTable() {
                       />
                     ) : project.project_status === "Pending" ? (
                       <ClipboardClock
-                        className="bg-gray-100 text-gray-500 p-1 rounded-lg"
+                        className="bg-orange-100 text-orange-500 p-1 rounded-lg"
                         size={24}
                       />
                     ) : project.project_status === "Canceled" ? (
                       <Ban
-                        className="bg-orange-100 text-orange-500 p-1 rounded-lg"
+                        className="bg-red-100 text-red-500 p-1 rounded-lg"
                         size={24}
                       />
                     ) : project.project_status === "Completed" ? (
