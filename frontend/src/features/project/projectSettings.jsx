@@ -1,12 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  Ban,
+  CalendarCheck,
+  CalendarFold,
+  CalendarMinus2,
+  ChartNoAxesColumn,
   Clipboard,
+  ClipboardClock,
   FolderCog,
   FolderOpen,
   Plus,
+  ReceiptText,
+  RefreshCcw,
   Settings,
+  SquareCheckBig,
   Trash,
   Trash2,
+  User,
+  UserRoundPen,
+  UserRoundPlus,
   UsersRound,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,6 +26,7 @@ import {
   deleteProjectAPI,
   editProjectDataAPI,
   getAllUserAPI,
+  getCurrentUserAPI,
   getProjectDataAPI,
   getProjectMemberRoleAPI,
   getProjectMembersAPI,
@@ -22,13 +35,13 @@ import {
   removeProjectMemberAPI,
 } from "../../api/projectAPI";
 import { useHelper } from "../../hooks/useHelper";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { usePermission } from "../../hooks/usePermission";
 
 export default function ProjectSettings() {
   const { projectId } = useParams();
-  const { token } = useHelper();
+  const { token, formattedDateTime, formatDate } = useHelper();
   const { isAdmin, isTeamLeader, loading } = usePermission();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -44,6 +57,13 @@ export default function ProjectSettings() {
   const [deleteProjectModal, setDeleteProjectModal] = useState(false);
 
   const [settingsDisplay, setSettingsDisplay] = useState("project-details");
+
+  const [search, setSearch] = useState("");
+
+  const { data: user } = useQuery({
+    queryKey: ["user-data"],
+    queryFn: () => getCurrentUserAPI(token),
+  });
 
   const { data: project } = useQuery({
     queryKey: ["project-data"],
@@ -70,15 +90,28 @@ export default function ProjectSettings() {
     queryFn: () => getProjectMembersAPI(token, projectId),
   });
 
-  const memberListData = Array.isArray(memberList?.members)
-    ? memberList?.members
-    : [];
+  const filteredMember = useMemo(() => {
+    const memberListData = Array.isArray(memberList?.members)
+      ? memberList?.members
+      : [];
+    if (!memberListData) return [];
+
+    return memberListData.filter((user) => {
+      const searchableText = [user.user.username]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(search.toLowerCase());
+    });
+  }, [memberList, search]);
 
   const { mutate: editProject } = useMutation({
     mutationFn: ({ formData, projectId }) =>
       editProjectDataAPI(token, formData, projectId),
     onSuccess: () => {
       toast.success("Project edited successfull!");
+      queryClient.invalidateQueries(["project-data"]);
     },
     onError: (err) => {
       toast.error("Failed to edit project. Please try again.");
@@ -142,43 +175,11 @@ export default function ProjectSettings() {
     addProjectMember(formData);
   };
 
-  // const addMember = (e) => {
-  //   e.preventDefault();
-
-  //   const select = addMemberRef.current.querySelector(
-  //     'select[name="project_members"]',
-  //   );
-  //   const selectedIds = Array.from(select.selectedOptions).map((opt) =>
-  //     Number(opt.value),
-  //   );
-
-  //   if (selectedIds.length === 0) {
-  //     toast.error("Please select at least one member.");
-  //     return;
-  //   }
-
-  //   const existingIds = project.project_members.map((member) => member.id);
-  //   const mergedIds = [...new Set([...existingIds, ...selectedIds])];
-
-  //   addProjectMember({ data: { project_members: mergedIds }, projectId });
-  // };
-
   const removeMember = (e) => {
     e.preventDefault();
 
     removeProjectMember(removeUserId);
   };
-
-  // const removeMember = (e) => {
-  //   e.preventDefault();
-
-  //   // Filter out the selected user from existing members
-  //   const updatedIds = project?.project_members
-  //     .map((member) => member.id)
-  //     .filter((id) => id !== removeUserId);
-
-  //   removeProjectMember({ data: { project_members: updatedIds }, projectId });
-  // };
 
   const deleteProject = (e) => {
     e.preventDefault();
@@ -195,24 +196,6 @@ export default function ProjectSettings() {
   }
 
   if (loading) return <p>Loading...</p>;
-
-  console.log(memberListData);
-
-  // const isTeamLeader =
-  //   user.is_superuser || // Admin
-  //   user.is_staff || // Staff
-  //   memberListData.some(
-  //     (member) =>
-  //       member.user.id === user.id && member.role === "Team Leader",
-  //   );
-
-  // const isMember =
-  //   user.is_superuser || // Admin
-  //   user.is_staff || // Staff
-  //   memberListData.some(
-  //     (member) =>
-  //       member.user.id === user.id && member.role === "Team Leader",
-  //   );
 
   return (
     <main className="w-full h-full">
@@ -237,7 +220,10 @@ export default function ProjectSettings() {
             <h1 className="font-semibold text-lg">Project Settings</h1>
           </div>
 
-          <div className="overflow-y-auto w-full h-full flex flex-col gap-4">
+          <div
+            className="overflow-y-auto w-full h-full flex flex-col gap-4"
+            style={{ scrollbarGutter: "stable" }}
+          >
             <div
               onClick={() => setSettingsDisplay("project-details")}
               className={`flex gap-2 items-center p-2 rounded ${settingsDisplay === "project-details" ? "bg-blue-500 text-white" : ""}`}
@@ -274,33 +260,88 @@ export default function ProjectSettings() {
               <h1 className="font-semibold text-lg">Project Details</h1>
             </div>
             <div className="flex gap-2 flex-col">
-              <h1 className="text-gray-700">Project Name</h1>
-              <p className="font-semibold">{project?.project_name}</p>
+              <span className="flex gap-2 text-gray-700">
+                <FolderOpen className="" size={18} />
+                <h1 className="font-semibold">Project Name</h1>
+              </span>
+              <p className="text-gray-700">{project?.project_name}</p>
             </div>
             <div className="flex gap-2 flex-col">
-              <h1 className="text-gray-700">Project Description</h1>
-
-              <p style={{ whiteSpace: "pre-line" }}>
+              <span className="flex gap-2 text-gray-700">
+                <ReceiptText size={18} />
+                <h1 className="font-semibold">Project Description</h1>
+              </span>
+              <p className="text-gray-700" style={{ whiteSpace: "pre-line" }}>
                 {project?.project_description}
               </p>
             </div>
             <div className="flex gap-2 flex-col">
-              <h1 className="text-gray-700">Status</h1>
-              <p>{project?.project_status}</p>
+              <span className="flex gap-2 text-gray-700">
+                <ChartNoAxesColumn size={18} />
+                <h1 className="font-semibold">Status</h1>
+              </span>
+              <span className="flex gap-2 items-center">
+                {project.project_status === "Active" ? (
+                  <RefreshCcw
+                    className="bg-green-100 text-green-500 p-1 rounded-lg"
+                    size={24}
+                  />
+                ) : project.project_status === "Pending" ? (
+                  <ClipboardClock
+                    className="bg-orange-100 text-orange-500 p-1 rounded-lg"
+                    size={24}
+                  />
+                ) : project.project_status === "Canceled" ? (
+                  <Ban
+                    className="bg-red-100 text-red-500 p-1 rounded-lg"
+                    size={24}
+                  />
+                ) : project.project_status === "Completed" ? (
+                  <SquareCheckBig
+                    className="bg-blue-100 text-blue-500 p-1 rounded-lg"
+                    size={24}
+                  />
+                ) : (
+                  ""
+                )}
+                <p className="text-gray-700 font-semibold">{project?.project_status}</p>
+              </span>
             </div>
             <div className="flex justify-between flex-wrap w-full gap-4">
               <div className="flex-1 flex flex-col gap-2">
-                <h1 className="text-gray-700">Start</h1>
-                <p>{project?.project_start}</p>
+                <span className="flex gap-2 text-gray-700">
+                  <CalendarCheck size={18} />
+                  <h1 className="font-semibold">Start</h1>
+                </span>
+                <p className="text-gray-700">{formatDate(project?.project_start)}</p>
               </div>
               <div className="flex-1 flex flex-col gap-2">
-                <h1 className="text-gray-700">End</h1>
-                <p>{project?.project_end}</p>
+                <span className="flex gap-2 text-gray-700">
+                  <CalendarMinus2 size={18} />
+                  <h1 className="font-semibold">End</h1>
+                </span>
+                <p className="text-gray-700">{formatDate(project?.project_end)}</p>
               </div>
             </div>
-            <div className="flex flex-wrap w-full gap-2">
-              <h1 className="text-gray-700">Created at :</h1>
-              <p>{project?.created_at}</p>
+            <div className="flex justify-between flex-wrap w-full gap-4">
+              <div className="flex-1 flex flex-col gap-2">
+                <span className="flex gap-2 text-gray-700">
+                  <CalendarFold size={18} />
+                  <h1 className="font-semibold">Created at</h1>
+                </span>
+                <p className="text-gray-700 font-semibold">
+                  {formattedDateTime(project?.created_at)}
+                </p>
+              </div>
+              <div className="flex-1 flex flex-col gap-2">
+                <span className="flex gap-2 text-gray-700">
+                  <UserRoundPen size={18} />
+                  <h1 className="font-semibold">Created by</h1>
+                </span>
+                <p className="text-gray-700 font-semibold">
+                  {formattedDateTime(project?.created_by?.username)}
+                </p>
+              </div>
             </div>
           </form>
         )}
@@ -314,55 +355,38 @@ export default function ProjectSettings() {
                   onClick={() => setAddUserModal(true)}
                   className="border border-gray-300 rounded-md p-2"
                 >
-                  <Plus size={18} />
+                  <UserRoundPlus size={18} />
                 </button>
               )}
             </div>
 
-            <div className="overflow-y-auto w-full">
-              {/* {project?.project_members
-                ?.slice() // copy array to avoid mutating state
-                .sort((a, b) => {
-                  // Team leader first
-                  if (a.id === project?.created_by?.id) return -1;
-                  if (b.id === project?.created_by?.id) return 1;
+            <input
+              type="text"
+              placeholder="Search member..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="
+    mb-3 px-3 py-2 text-sm
+    border border-gray-300 rounded-md
+    focus:outline-none focus:ring-2 focus:ring-blue-500
+  "
+            />
 
-                  // Alphabetical sort by username
-                  return a.username.localeCompare(b.username);
-                })
-                .map((user) => (
-                  <div
-                    key={user.id}
-                    className="flex justify-between items-center mb-2"
-                  >
-                    <p>{user.username}</p>
-
-                    {user.id === project?.created_by?.id && (
-                      <p className="p-1 px-4 text-gray-700 flex gap-2 font-semibold border border-gray-300 rounded-md">
-                        Team Leader
-                      </p>
-                    )}
-
-                    {user.id !== project?.created_by?.id && (
-                      <Trash2
-                        className="bg-red-100 text-red-500 p-1 rounded-md"
-                        onClick={() => {
-                          setRemoveUserModal(true);
-                          setRemoveUserId(user.id);
-                        }}
-                        size={24}
-                      />
-                    )}
-                  </div>
-                ))} */}
-
-              {memberListData?.map((user) => (
+            <div
+              className="overflow-y-auto w-full"
+              style={{ scrollbarGutter: "stable" }}
+            >
+              {filteredMember?.map((user) => (
                 <div
                   key={user.id}
                   className="flex justify-between items-center mb-2"
                 >
                   <span className="flex gap-3 items-center">
-                    <p>{user?.user?.username}</p>
+                    <User
+                      className="bg-violet-100 text-violet-500 p-1 rounded-lg"
+                      size={24}
+                    />
+                    <p className="text-gray-700 font-semibold">{user?.user?.username}</p>
                     {user?.role === "Team Leader" && (
                       <p className="p-0.5 px-4 text-gray-700 flex gap-2 font-semibold border border-gray-300 rounded-md">
                         {user?.role}
@@ -395,7 +419,10 @@ export default function ProjectSettings() {
               <h1 className="font-semibold text-lg">Edit Project Details</h1>
             </div>
             <div className="flex gap-2 flex-col">
-              <h1 className="text-gray-700">Project Name</h1>
+              <span className="flex gap-2 text-gray-700">
+                <FolderOpen className="" size={18} />
+                <h1 className="font-semibold">Project Name</h1>
+              </span>
               <input
                 type="text"
                 name="project_name"
@@ -404,19 +431,25 @@ export default function ProjectSettings() {
               />
             </div>
             <div className="flex gap-2 flex-col">
-              <h1 className="text-gray-700">Project Description</h1>
+              <span className="flex gap-2 text-gray-700">
+                <ReceiptText size={18} />
+                <h1 className="font-semibold">Project Description</h1>
+              </span>
               <textarea
                 type="text"
                 name="project_description"
                 defaultValue={project?.project_description}
-                className="p-2 border-gray-300 border rounded-md w-full"
+                className="p-2 border-gray-300 border rounded-md w-full min-h-[100px]"
               />
             </div>
             <div className="flex gap-2 flex-col">
-              <h1 className="text-gray-700">Status</h1>
+              <span className="flex gap-2 text-gray-700">
+                <ChartNoAxesColumn size={18} />
+                <h1 className="font-semibold">Status</h1>
+              </span>
               <select
                 name="project_status"
-                className="p-2 border-gray-300 border rounded-md w-full"
+                className="p-2 border-gray-300 border rounded-md w-full bg-white"
                 required
                 defaultValue={project?.project_status}
               >
@@ -430,7 +463,10 @@ export default function ProjectSettings() {
             </div>
             <div className="flex justify-between flex-wrap w-full gap-4">
               <div className="flex-1 flex flex-col gap-2">
-                <h1 className="text-gray-700">Start</h1>
+                <span className="flex gap-2 text-gray-700">
+                  <CalendarCheck size={18} />
+                  <h1 className="font-semibold">Start</h1>
+                </span>
                 <input
                   type="date"
                   name="project_start"
@@ -439,7 +475,10 @@ export default function ProjectSettings() {
                 />
               </div>
               <div className="flex-1 flex flex-col gap-2">
-                <h1 className="text-gray-700">End</h1>
+                <span className="flex gap-2 text-gray-700">
+                  <CalendarMinus2 size={18} />
+                  <h1 className="font-semibold">End</h1>
+                </span>
                 <input
                   type="date"
                   name="project_end"
@@ -448,9 +487,25 @@ export default function ProjectSettings() {
                 />
               </div>
             </div>
-            <div className="flex flex-wrap w-full gap-2">
-              <h1 className="text-gray-700">Created at :</h1>
-              <p>{project?.created_at}</p>
+            <div className="flex justify-between flex-wrap w-full gap-4">
+              <div className="flex-1 flex flex-col gap-2">
+                <span className="flex gap-2 text-gray-700">
+                  <CalendarFold size={18} />
+                  <h1 className="font-semibold">Created at</h1>
+                </span>
+                <p className="text-gray-700 font-semibold">
+                  {formattedDateTime(project?.created_at)}
+                </p>
+              </div>
+              <div className="flex-1 flex flex-col gap-2">
+                <span className="flex gap-2 text-gray-700">
+                  <UserRoundPen size={18} />
+                  <h1 className="font-semibold">Created by</h1>
+                </span>
+                <p className="text-gray-700 font-semibold">
+                  {formattedDateTime(project?.created_by?.username)}
+                </p>
+              </div>
             </div>
 
             <div className="flex flex-row-reverse gap-2">
@@ -495,9 +550,11 @@ export default function ProjectSettings() {
                   project.
                 </p>
 
+                <input type="hidden" name="created_by" value={user.id} />
+
                 <select
                   name="user"
-                  className="p-2 border-gray-300 border rounded-md w-full"
+                  className="p-2 border-gray-300 border rounded-md w-full bg-white"
                   required
                 >
                   <option value="">Select User</option>
@@ -524,7 +581,7 @@ export default function ProjectSettings() {
 
                 <select
                   name="role"
-                  className="p-2 border-gray-300 border rounded-md w-full"
+                  className="p-2 border-gray-300 border rounded-md w-full bg-white"
                   required
                 >
                   <option value="">Select Role</option>

@@ -67,6 +67,7 @@ class TaskCreate(generics.CreateAPIView):
 class TaskRetriveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated, ProjectPermission]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -111,13 +112,23 @@ class ProjectWithTaskList(generics.RetrieveAPIView):
             Prefetch("tasks", queryset=tasks_qs, to_attr="user_tasks")
         )
 
-
 class TaskBulkDelete(generics.GenericAPIView):
     queryset = Task.objects.all()
+    permission_classes = [IsAuthenticated, ProjectPermission]
 
     def delete(self, request, *args, **kwargs):
         ids = request.data.get('ids', [])
         if not ids:
-            return Response({'error': 'No IDs provided'}, status=status.HTTP_400_BAD_REQUEST)
-        Task.objects.filter(id__in=ids).delete()
+            return Response(
+                {'error': 'No IDs provided'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        tasks = Task.objects.filter(id__in=ids)
+
+        for task in tasks:
+            self.check_object_permissions(request, task)
+
+        tasks.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)

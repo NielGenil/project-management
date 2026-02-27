@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from projects.models import ProjectMembership
+from projects.models import ProjectMembership, Project, Task
+
 
 class ProjectPermission(BasePermission):
 
@@ -30,12 +31,16 @@ class ProjectPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         user = request.user
 
-        # Admins bypass all rules
+        # Admin bypass
         if user.is_superuser or user.is_staff:
             return True
 
-        # Get membership
-        project = obj.project if hasattr(obj, "project") else obj
+        # Detect project properly
+        if isinstance(obj, Project):
+            project = obj
+        else:
+            project = obj.project  # Task or ProjectMembership
+
         membership = ProjectMembership.objects.filter(
             user=user,
             project=project
@@ -45,18 +50,25 @@ class ProjectPermission(BasePermission):
             return False
 
 
-        # ===== Team Leader Rules =====
+        # ================= TEAM LEADER =================
         if membership.role == "Team Leader":
-            # ❌ Team Leader CANNOT delete project
-            if request.method == "DELETE" and view.__class__.__name__ == "ProjectDetail":
+
+            # ❌ Team Leader CANNOT delete Project
+            if request.method == "DELETE" and isinstance(obj, Project):
                 return False
+            
+            if request.method == "DELETE" and isinstance(obj, Task):
+                return True
 
-            # Team Leader can view, update, patch
-            return request.method in ["GET", "PUT", "PATCH"]
+            # ✅ Can delete ProjectMembership
+            # ✅ Can update Project
+            # ✅ Can update/delete Tasks
+            return True
 
 
-        # ===== Member Rules =====
+        # ================= MEMBER =================
         if membership.role == "Member":
+
             # Member can only view
             return request.method in SAFE_METHODS
 

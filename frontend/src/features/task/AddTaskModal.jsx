@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHelper } from "../../hooks/useHelper";
 import {
+  getCurrentUserAPI,
   getProjectMembersAPI,
   getTaskStatusAPI,
   postTaskAPI,
@@ -12,6 +13,11 @@ export default function AddTaskModal({ onClose, projectData, projectId }) {
   const { token } = useHelper();
   const addTaskRef = useRef();
   const queryClient = useQueryClient();
+
+  const { data: user } = useQuery({
+    queryKey: ["user-data"],
+    queryFn: () => getCurrentUserAPI(token),
+  });
 
   const { data: taskStatus } = useQuery({
     queryKey: ["task-status"],
@@ -61,6 +67,7 @@ export default function AddTaskModal({ onClose, projectData, projectId }) {
           className="w-full flex flex-col gap-5"
         >
           <input type="hidden" name="project" value={projectData?.id} />
+          <input type="hidden" name="created_by" value={user.id} />
           <div className="flex flex-col gap-4">
             <div>
               <h1 className="text-md font-semibold">Title</h1>
@@ -85,7 +92,7 @@ export default function AddTaskModal({ onClose, projectData, projectId }) {
                 <h1 className="text-md font-semibold">User</h1>
                 <select
                   name="task_assign_user"
-                  className="p-2 border-gray-300 border rounded-md w-full"
+                  className="p-2 border-gray-300 border rounded-md w-full bg-white"
                   required
                 >
                   <option value="">Assign user</option>
@@ -112,7 +119,7 @@ export default function AddTaskModal({ onClose, projectData, projectId }) {
                 <h1 className="text-md font-semibold">Priority</h1>
                 <select
                   name="task_priority"
-                  className="p-2 border-gray-300 border rounded-md w-full"
+                  className="p-2 border-gray-300 border rounded-md w-full bg-white"
                   required
                 >
                   <option value="">Set Task Priority</option>
@@ -127,7 +134,7 @@ export default function AddTaskModal({ onClose, projectData, projectId }) {
                 <h1 className="text-md font-semibold">Status</h1>
                 <select
                   name="task_status"
-                  className="p-2 border-gray-300 border rounded-md w-full"
+                  className="p-2 border-gray-300 border rounded-md w-full bg-white"
                   required
                 >
                   <option value="">Set Task Status</option>

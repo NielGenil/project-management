@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 import { usePermission } from "../../hooks/usePermission";
 
 export default function TaskDetailModal({ onClose, taskDetail, projectId }) {
-  const { token } = useHelper();
+  const { token, formattedDateTime } = useHelper();
   const editTaskRef = useRef();
   const queryClient = useQueryClient();
   const { isTeamLeader } = usePermission();
@@ -103,14 +103,14 @@ export default function TaskDetailModal({ onClose, taskDetail, projectId }) {
                   <h1 className="text-md font-semibold">User</h1>
                   <select
                     name="task_assign_user"
-                    className="p-2 border-gray-300 border rounded-md w-full"
+                    className="p-2 border-gray-300 border rounded-md w-full bg-white"
                     required
                     defaultValue={taskDetail?.task_assign_user?.id}
                   >
                     <option value="">Select User</option>
                     {memberListData?.map((user) => (
                       <option key={user.id} value={user.user.id}>
-                        {user?.user?.username} {user.user.id}
+                        {user?.user?.username}
                       </option>
                     ))}
                   </select>
@@ -132,7 +132,7 @@ export default function TaskDetailModal({ onClose, taskDetail, projectId }) {
                   <h1 className="text-md font-semibold">Priority</h1>
                   <select
                     name="task_priority"
-                    className="p-2 border-gray-300 border rounded-md w-full"
+                    className="p-2 border-gray-300 border rounded-md w-full bg-white"
                     required
                     defaultValue={taskDetail?.task_priority}
                   >
@@ -148,7 +148,7 @@ export default function TaskDetailModal({ onClose, taskDetail, projectId }) {
                   <h1 className="text-md font-semibold">Status</h1>
                   <select
                     name="task_status"
-                    className="p-2 border-gray-300 border rounded-md w-full"
+                    className="p-2 border-gray-300 border rounded-md w-full bg-white"
                     required
                     defaultValue={taskDetail?.task_status}
                   >
@@ -159,6 +159,17 @@ export default function TaskDetailModal({ onClose, taskDetail, projectId }) {
                       </option>
                     ))}
                   </select>
+                </div>
+              </div>
+
+              <div className="w-full flex gap-4 flex-wrap">
+                <div className="flex-1">
+                  <h1 className="text-md font-semibold">Created at</h1>
+                  <p>{formattedDateTime(taskDetail?.created_at)}</p>
+                </div>
+                <div className="flex-1">
+                  <h1 className="text-md font-semibold">Created by</h1>
+                  <p>{taskDetail?.created_by?.username}</p>
                 </div>
               </div>
             </div>
@@ -200,7 +211,7 @@ export default function TaskDetailModal({ onClose, taskDetail, projectId }) {
                   <h1 className="text-md font-semibold">Status</h1>
                   <select
                     name="task_status"
-                    className="p-2 border-gray-300 border rounded-md w-full"
+                    className="p-2 border-gray-300 border rounded-md w-full bg-white"
                     required
                     defaultValue={taskDetail?.task_status}
                   >
@@ -211,6 +222,16 @@ export default function TaskDetailModal({ onClose, taskDetail, projectId }) {
                       </option>
                     ))}
                   </select>
+                </div>
+              </div>
+              <div className="w-full flex gap-4 flex-wrap">
+                <div className="flex-1">
+                  <h1 className="text-md font-semibold">Created at</h1>
+                  <p>{formattedDateTime(taskDetail?.created_at)}</p>
+                </div>
+                <div className="flex-1">
+                  <h1 className="text-md font-semibold">Created by</h1>
+                  <p>{taskDetail?.created_by?.username}</p>
                 </div>
               </div>
             </div>

@@ -7,26 +7,19 @@ import {
 } from "../../api/projectAPI";
 import {
   ActivityIcon,
-  ActivitySquare,
-  Ban,
   BookmarkCheck,
   CalendarCheck,
-  CalendarMinus2,
-  CalendarX,
   Clipboard,
   ClipboardCheck,
-  ClipboardClock,
   Layers,
   Layers2,
   LayersPlus,
-  RefreshCcw,
   Settings,
-  SquareCheckBig,
   SquareX,
   Trash,
   User,
 } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import TaskDetailModal from "./taskDetailModal";
 import toast from "react-hot-toast";
@@ -34,7 +27,7 @@ import { usePermission } from "../../hooks/usePermission";
 
 export default function TaskTable() {
   const { projectId } = useParams();
-  const { token } = useHelper();
+  const { token, formatDate } = useHelper();
   const { isTeamLeader } = usePermission();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -48,14 +41,17 @@ export default function TaskTable() {
   const [selectedTasksIds, setSelectedTasksIds] = useState([]);
   const [deleteTaskModal, setDeleteTaskModal] = useState(false);
 
-  const { data: taskList } = useQuery({
-    queryKey: ["task-list"],
+  const { data: taskList, isLoading  } = useQuery({
+    queryKey: ["task-list", projectId],
     queryFn: () => getTaskDataAPI(token, projectId),
+    enabled: !!projectId,
+    keepPreviousData: false,
   });
 
   const { data: projectData } = useQuery({
-    queryKey: ["project-data"],
+    queryKey: ["project-data", projectId],
     queryFn: () => getProjectDataAPI(token, projectId),
+    enabled: !!projectId,
   });
 
   const { mutate: deleteSelectedTask } = useMutation({
@@ -63,7 +59,8 @@ export default function TaskTable() {
     onSuccess: () => {
       toast.success("Taks deleted successfully!");
       setSelectedTasksIds([]);
-      queryClient.invalidateQueries(["tasks-list"]);
+      queryClient.invalidateQueries(["task-list"]);
+      setDeleteTaskModal(false);
     },
     onError: () => {
       toast.error("Failed to delete tasks. Please try again.");
@@ -89,14 +86,29 @@ export default function TaskTable() {
     return matchStatus && matchPriority && matchUser;
   });
 
-  const deleteTask = () => {
+  const deleteTask = (e) => {
+    e.preventDefault();
     if (selectedTasksIds.length === 0) return;
     deleteSelectedTask(selectedTasksIds);
   };
 
-  // console.log(taskList);
+  const allSelected =
+    filteredTasks.length > 0 &&
+    filteredTasks.every((task) => selectedTasksIds.includes(task.id));
 
-    if (!taskListData) {
+  const handleSelectAll = (e) => {
+    e.stopPropagation();
+
+    if (allSelected) {
+      // Unselect all
+      setSelectedTasksIds([]);
+    } else {
+      // Select all visible (filtered) tasks
+      setSelectedTasksIds(filteredTasks.map((task) => task.id));
+    }
+  };
+
+  if (!taskListData) {
     return (
       <main className="fixed z-50 bg-black/20 inset-0 flex justify-center items-center">
         <div className="bg-white p-6 rounded-md shadow-xl">Loading...</div>
@@ -183,7 +195,7 @@ export default function TaskTable() {
               </button>
             )}
 
-            {selectedTasksIds.length > 0 && (
+            {isTeamLeader && selectedTasksIds.length > 0 && (
               <button
                 onClick={() => setDeleteTaskModal(true)}
                 className="flex items-center gap-2 bg-red-500 text-white px-3 py-1.5 rounded-lg text-sm"
@@ -200,9 +212,28 @@ export default function TaskTable() {
           <thead>
             <tr className="text-left uppercase text-xs text-gray-500">
               <th className="px-2 py-3 flex gap-2 items-center">
-                <div
-                  className={`w-4 h-4 rounded-full flex-shrink-0 cursor-pointer flex items-center justify-center transition-colors bg-gray-300 `}
-                ></div>
+                {isTeamLeader && (
+                  <div
+                    onClick={handleSelectAll}
+                    className={`w-4 h-4 rounded-full flex-shrink-0 cursor-pointer flex items-center justify-center transition-colors ${
+                      allSelected
+                        ? "bg-blue-500 border-blue-500"
+                        : "bg-gray-300"
+                    }`}
+                  >
+                    {allSelected && (
+                      <svg
+                        className="w-2.5 h-2.5 text-white"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <polyline points="1,6 4,9 11,3" />
+                      </svg>
+                    )}
+                  </div>
+                )}
                 Tasks
               </th>
               <th className="px-2 py-3">Assigned User</th>
@@ -222,33 +253,36 @@ export default function TaskTable() {
                 className="border-t border-gray-200 text-sm"
               >
                 <td className="px-2 py-3 flex gap-2 items-center">
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedTasksIds((prev) =>
-                        prev.includes(task.id)
-                          ? prev.filter((id) => id !== task.id)
-                          : [...prev, task.id],
-                      );
-                    }}
-                    className={`w-4 h-4 rounded-full flex-shrink-0 cursor-pointer flex items-center justify-center transition-colors ${
-                      selectedTasksIds.includes(task.id)
-                        ? "bg-blue-500 border-blue-500"
-                        : "bg-gray-300"
-                    }`}
-                  >
-                    {selectedTasksIds.includes(task.id) && (
-                      <svg
-                        className="w-2.5 h-2.5 text-white"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <polyline points="1,6 4,9 11,3" />
-                      </svg>
-                    )}
-                  </div>
+                  {isTeamLeader && (
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedTasksIds((prev) =>
+                          prev.includes(task.id)
+                            ? prev.filter((id) => id !== task.id)
+                            : [...prev, task.id],
+                        );
+                      }}
+                      className={`w-4 h-4 rounded-full flex-shrink-0 cursor-pointer flex items-center justify-center transition-colors ${
+                        selectedTasksIds.includes(task.id)
+                          ? "bg-blue-500 border-blue-500"
+                          : "bg-gray-300"
+                      }`}
+                    >
+                      {selectedTasksIds.includes(task.id) && (
+                        <svg
+                          className="w-2.5 h-2.5 text-white"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <polyline points="1,6 4,9 11,3" />
+                        </svg>
+                      )}
+                    </div>
+                  )}
+
                   {task.task_name}
                 </td>
                 <td className="px-2 py-3">
@@ -309,7 +343,7 @@ export default function TaskTable() {
                 <td className="px-2 py-3">
                   <span className="flex gap-2 items-center">
                     <CalendarCheck className="text-gray-500" size={18} />
-                    {task.task_due}
+                    {formatDate(task.task_due)}
                   </span>
                 </td>
               </tr>

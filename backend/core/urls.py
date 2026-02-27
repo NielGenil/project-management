@@ -15,11 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from accounts.views import UserList, CurrentUserView
 
 from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView, TaskCreate, TaskRetriveUpdateDestroy, TaskChoicesView, ProjectWithTaskList, TaskBulkDelete, ProjectMemberRolesChoicesView, ProjectMemberCreate, ProjectMemberRetriveUpdateDestroy, ProjectWithMemberList
+
+from notifications.views import MarkAllReadView
 
 
 from rest_framework_simplejwt.views import (
@@ -29,6 +31,8 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('api/notifications/', include('notifications.urls')),
 
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -54,5 +58,6 @@ urlpatterns = [
     path('api/task-status-priority/', TaskChoicesView.as_view(), name='task-status-priority'),
 
     path('api/task-bulk-delete/', TaskBulkDelete.as_view(), name='task-bulk-delete'),
+    path('api/mark-all-read/', MarkAllReadView.as_view(), name='mark-all-read'),
 
 ]

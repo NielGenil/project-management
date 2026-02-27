@@ -105,7 +105,7 @@ export default function AddProjectModal({ onClose }) {
                 <h1 className="text-md font-semibold">Status</h1>
                 <select
                   name="project_status"
-                  className="p-2 border-gray-300 border rounded-md w-full"
+                  className="p-2 border-gray-300 border rounded-md w-full bg-white"
                   required
                 >
                   <option value="">Set Project Status</option>

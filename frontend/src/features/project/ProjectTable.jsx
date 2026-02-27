@@ -5,27 +5,50 @@ import {
   Ban,
   CalendarCheck,
   CalendarMinus2,
-  CalendarX,
   ClipboardClock,
   RefreshCcw,
   SquareCheckBig,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import TaskPage from "../../pages/taskPage";
+import { useState } from "react";
 
 export default function ProjectTable() {
-  const { token } = useHelper();
+  const { token, formatDate } = useHelper();
   const navigate = useNavigate();
+
+  const [statusFilter, setStatusFilter] = useState("");
 
   const { data: projectList } = useQuery({
     queryKey: ["project-list"],
     queryFn: () => getAllProjectAPI(token),
   });
 
-//   console.log(projectList);
+  const projectListData = Array.isArray(projectList) ? projectList : [];
+
+  const filterProjectList = projectListData.filter((project) => {
+    const projectStatus =
+      statusFilter === "" || project.project_status === statusFilter;
+
+    return projectStatus;
+  });
 
   return (
     <main className="w-full h-full">
+      <div className="mb-2 w-full flex-row-reverse flex">
+        <select
+          name=""
+          id=""
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+           className="p-1.5 text-gray-700 font-semibold border-gray-300 bg-white border rounded-md"
+        >
+          <option value="">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Pending">Pending</option>
+          <option value="Completed">Completed</option>
+          <option value="Canceled">Canceled</option>
+        </select>
+      </div>
       <div className="bg-white border-2 border-gray-200 rounded-md overflow-hidden overflow-x-auto w-full">
         <table className="w-full">
           <thead>
@@ -38,7 +61,7 @@ export default function ProjectTable() {
           </thead>
 
           <tbody className="w-full">
-            {projectList?.map((project) => (
+            {filterProjectList?.map((project) => (
               <tr
                 key={project.id}
                 onClick={() => {
@@ -78,13 +101,13 @@ export default function ProjectTable() {
                 <td className="px-2 py-3">
                   <span className="flex gap-2 items-center">
                     <CalendarCheck className="text-gray-500" size={18} />
-                    {project.project_start}
+                    {formatDate(project.project_start)}
                   </span>
                 </td>
                 <td className="px-2 py-3">
                   <span className="flex gap-2 items-center">
                     <CalendarMinus2 className="text-gray-500" size={18} />
-                    {project.project_end}
+                    {formatDate(project.project_end)}
                   </span>
                 </td>
               </tr>

@@ -11,7 +11,6 @@ class Project(models.Model):
         COMPLETED = 'Completed'
         CANCELED = 'Canceled'
 
-        
     project_name = models.CharField(max_length=100)
     project_description = models.TextField(null=True, blank=True)
     project_status = models.CharField(max_length=50, choices=ProjectStatus.choices, default=ProjectStatus.PENDING)
@@ -32,6 +31,7 @@ class ProjectMembership(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_member')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='members')
     role = models.CharField(max_length=20, choices=ProjectMembershipChoices.choices, default=ProjectMembershipChoices.MEMBER)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='member_creator')
 
     class Meta:
         constraints = [
@@ -40,9 +40,9 @@ class ProjectMembership(models.Model):
 
     def __str__(self):
         return f"{self.project.project_name} - {self.user.username}"
-    
+
 class Task(models.Model):
-     
+
     class TaskPriority(models.TextChoices):
         LOW = 'Low'
         MEDIUM = 'Medium'
@@ -61,6 +61,7 @@ class Task(models.Model):
     task_status = models.CharField(max_length=50, choices=TaskStatus.choices, default=TaskStatus.TODO)
     task_due = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='task_creator')
 
     def __str__(self):
-        return self.task_name
+        return f"{self.project.project_name} - {self.task_name}"

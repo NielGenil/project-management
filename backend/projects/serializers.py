@@ -49,7 +49,7 @@ class TaskProjectSerializer(serializers.ModelSerializer):
     task_assign_user = CustomUserSerializer()
     class Meta:
         model = Task
-        fields = ['id', 'task_name', 'task_description', 'task_assign_user', 'task_priority', 'task_status', 'task_due', 'created_at']
+        fields = ['id', 'task_name', 'task_description', 'task_assign_user', 'task_priority', 'task_status', 'task_due', 'created_at', 'created_by']
         depth = 1
 
 class ProjectWithTasksSerializer(serializers.ModelSerializer):
