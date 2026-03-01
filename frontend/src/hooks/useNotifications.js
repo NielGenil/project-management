@@ -17,7 +17,7 @@ export function useNotifications() {
     if (wsRef.current && wsRef.current.readyState <= WebSocket.OPEN) return;
 
     const ws = new WebSocket(
-      `ws://localhost:8000/ws/notifications/?token=${token}`
+      `ws://localhost:8001/ws/notifications/?token=${token}`
     );
     wsRef.current = ws;
 

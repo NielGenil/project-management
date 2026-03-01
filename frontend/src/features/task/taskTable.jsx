@@ -117,7 +117,7 @@ export default function TaskTable() {
   }
 
   return (
-    <main className="w-full h-full">
+    <main className="w-full h-full sm:text-sm text-xs">
       <div className="flex justify-between items-center mb-2 gap-2 flex-wrap">
         <div className="flex items-center">
           <button className="flex gap-2 items-center p-1.5 border border-gray-300 border-r-0 rounded-l-md bg-blue-500 text-white">
@@ -210,8 +210,8 @@ export default function TaskTable() {
       <div className="bg-white border-2 border-gray-200 rounded-md overflow-hidden overflow-x-auto w-full">
         <table className="w-full">
           <thead>
-            <tr className="text-left uppercase text-xs text-gray-500">
-              <th className="px-2 py-3 flex gap-2 items-center">
+            <tr className="text-left uppercase text-gray-500">
+              <th className="px-2 py-3 flex gap-2 min-w-[100px] items-center  sm:text-sm text-[10px]">
                 {isTeamLeader && (
                   <div
                     onClick={handleSelectAll}
@@ -236,10 +236,10 @@ export default function TaskTable() {
                 )}
                 Tasks
               </th>
-              <th className="px-2 py-3">Assigned User</th>
-              <th className="px-2 py-3">Status</th>
-              <th className="px-2 py-3">Priority</th>
-              <th className="px-2 py-3">Due Date</th>
+              <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Assigned User</th>
+              <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Status</th>
+              <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Priority</th>
+              <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Due Date</th>
             </tr>
           </thead>
           <tbody className="w-full">
@@ -252,7 +252,7 @@ export default function TaskTable() {
                 }}
                 className="border-t border-gray-200 text-sm"
               >
-                <td className="px-2 py-3 flex gap-2 items-center">
+                <td className="px-2 py-3 flex gap-2 items-center  sm:text-sm text-xs">
                   {isTeamLeader && (
                     <div
                       onClick={(e) => {
@@ -285,7 +285,7 @@ export default function TaskTable() {
 
                   {task.task_name}
                 </td>
-                <td className="px-2 py-3">
+                <td className="px-2 py-3  sm:text-sm text-xs">
                   <span className="flex gap-2 items-center">
                     <User
                       className="bg-violet-100 text-violet-500 p-1 rounded-lg"
@@ -294,7 +294,7 @@ export default function TaskTable() {
                     {task.task_assign_user?.username}
                   </span>
                 </td>
-                <td className="px-2 py-3">
+                <td className="px-2 py-3 sm:text-sm text-xs">
                   <span className="flex gap-2 items-center">
                     {task.task_status === "To Do" ? (
                       <BookmarkCheck
@@ -317,7 +317,7 @@ export default function TaskTable() {
                     {task.task_status}
                   </span>
                 </td>
-                <td className="px-2 py-3">
+                <td className="px-2 py-3 sm:text-sm text-xs">
                   <span className="flex gap-2 items-center">
                     {task.task_priority === "Low" ? (
                       <Layers2
@@ -340,7 +340,7 @@ export default function TaskTable() {
                     {task.task_priority}
                   </span>
                 </td>
-                <td className="px-2 py-3">
+                <td className="px-2 py-3 sm:text-sm text-xs">
                   <span className="flex gap-2 items-center">
                     <CalendarCheck className="text-gray-500" size={18} />
                     {formatDate(task.task_due)}
@@ -350,7 +350,7 @@ export default function TaskTable() {
             ))}
             {filteredTasks.length === 0 && (
               <tr>
-                <td colSpan={5} className="text-center py-4 text-gray-500">
+                <td colSpan={5} className="text-center py-4 text-gray-500 sm:text-sm text-xs">
                   No tasks found
                 </td>
               </tr>

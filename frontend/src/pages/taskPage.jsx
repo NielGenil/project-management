@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, Outlet, useParams } from "react-router-dom";
-import { getProjectDataAPI, getProjectMembersAPI, getTaskDataAPI } from "../api/projectAPI";
+import {
+  getProjectDataAPI,
+  getProjectMembersAPI,
+  getTaskDataAPI,
+} from "../api/projectAPI";
 import { useHelper } from "../hooks/useHelper";
 import {
   ActivityIcon,
@@ -38,14 +42,14 @@ export default function TaskPage() {
     queryFn: () => getTaskDataAPI(token, projectId),
   });
 
-    const { data: memberList } = useQuery({
-      queryKey: ["project-member"],
-      queryFn: () => getProjectMembersAPI(token, projectId),
-    });
-  
-    const memberListData = Array.isArray(memberList?.members)
-      ? memberList?.members
-      : [];
+  const { data: memberList } = useQuery({
+    queryKey: ["project-member"],
+    queryFn: () => getProjectMembersAPI(token, projectId),
+  });
+
+  const memberListData = Array.isArray(memberList?.members)
+    ? memberList?.members
+    : [];
 
   const taskListData = Array.isArray(taskList?.tasks) ? taskList?.tasks : [];
 
@@ -57,12 +61,12 @@ export default function TaskPage() {
     (task) => task.task_status === "In Progress",
   ).length;
 
-    const taskDoneCount = taskListData.filter(
+  const taskDoneCount = taskListData.filter(
     (task) => task.task_status === "Done",
   ).length;
 
   return (
-    <main className="flex flex-col gap-10 sm:px-10">
+    <main className="flex flex-col sm:gap-10 gap-5 sm:px-10">
       {/* first section */}
       <section className="w-full">
         <div className="flex sm:flex-row flex-col flex-1 justify-between items-center gap-4">
@@ -78,10 +82,10 @@ export default function TaskPage() {
               </Link>
             </div>
             <div>
-              <h1 className="text-2xl font-semibold">
+              <h1 className="sm:text-2xl text-lg font-semibold">
                 {projectData?.project_name}
               </h1>
-              <p className="text-gray-500">
+              <p className="text-gray-500 text-xs sm:text-sm">
                 Manage project tasks and details in one place. Assign tasks,
                 track progress, and stay organized.
               </p>
@@ -102,56 +106,60 @@ export default function TaskPage() {
       </section>
 
       {/* second section */}
-      <section className="w-full flex gap-4 flex-col sm:flex-row sm:flex-wrap items-center">
-        <div className="flex w-full flex-1 sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
-          <div>
-            <p className="text-gray-500 text-sm">Total Task</p>
-            <h1 className="text-2xl font-semibold">{taskCount}</h1>
+      <section className="w-full flex sm:gap-4 flex justify-between gap-2 sm:flex-row sm:flex-wrap items-center">
+        <div className="flex-1 flex sm:flex-row flex-col gap-2">
+          <div className="flex w-full sm:flex-1 h-[50px] sm:h-[90px] justify-between items-center border-gray-300 rounded-md border sm:p-4 p-1">
+            <div>
+              <p className="text-gray-500 sm:text-sm text-xs">Total Task</p>
+              <h1 className="sm:text-2xl text:lg font-semibold">{taskCount}</h1>
+            </div>
+            <div>
+              <BookType
+                className="bg-yellow-100 text-yellow-500 p-1 rounded-lg sm:w-9 sm:h-9 w-7 h-7"
+                // size={35}
+              />
+            </div>
           </div>
-          <div>
-            <BookType
-              className="bg-yellow-100 text-yellow-500 p-1 rounded-lg"
-              size={35}
-            />
+
+          <div className="flex w-full sm:flex-1 sm:h-[90px] h-[50px] justify-between items-center border-gray-300 rounded-md border sm:p-4 p-1">
+            <div>
+              <p className="text-gray-500 sm:text-sm text-xs">In Progress</p>
+              <h1 className="sm:text-2xl text:lg font-semibold">{taskInProgressCount}</h1>
+            </div>
+            <div>
+              <ActivityIcon
+                className="bg-green-100 text-green-500 p-1 rounded-lg sm:w-9 sm:h-9 w-7 h-7"
+                // size={35}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex w-full flex-1 sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
-          <div>
-            <p className="text-gray-500 text-sm">In Progress Task</p>
-            <h1 className="text-2xl font-semibold">{taskInProgressCount}</h1>
+        <div className="flex-1 flex sm:flex-row flex-col gap-2">
+          <div className="flex w-full sm:flex-1 sm:h-[90px] h-[50px] justify-between items-center border-gray-300 rounded-md border sm:p-4 p-1">
+            <div>
+              <p className="text-gray-500 sm:text-sm text-xs">Completed</p>
+              <h1 className="sm:text-2xl text:lg font-semibold">{taskDoneCount}</h1>
+            </div>
+            <div>
+              <ClipboardCheck
+                className="bg-blue-100 text-blue-500 p-1 rounded-lg sm:w-9 sm:h-9 w-7 h-7"
+                // size={35}
+              />
+            </div>
           </div>
-          <div>
-            <ActivityIcon
-              className="bg-green-100 text-green-500 p-1 rounded-lg"
-              size={35}
-            />
-          </div>
-        </div>
 
-        <div className="flex w-full flex-1 sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
-          <div>
-            <p className="text-gray-500 text-sm">Completed Task</p>
-            <h1 className="text-2xl font-semibold">{taskDoneCount}</h1>
-          </div>
-          <div>
-            <ClipboardCheck
-              className="bg-blue-100 text-blue-500 p-1 rounded-lg"
-              size={35}
-            />
-          </div>
-        </div>
-
-        <div className="flex w-full flex-1 sm:h-[90px] justify-between items-center border-gray-300 rounded-md border p-4">
-          <div>
-            <p className="text-gray-500 text-sm">Total Member</p>
-            <h1 className="text-2xl font-semibold">{projectMemberCount}</h1>
-          </div>
-          <div>
-            <User
-              className="bg-violet-100 text-violet-500 p-1 rounded-lg"
-              size={35}
-            />
+          <div className="flex w-full sm:flex-1 sm:h-[90px] h-[50px] justify-between items-center border-gray-300 rounded-md border sm:p-4 p-1">
+            <div>
+              <p className="text-gray-500 sm:text-sm text-xs">Total Member</p>
+              <h1 className="sm:text-2xl text:lg font-semibold">{projectMemberCount}</h1>
+            </div>
+            <div>
+              <User
+                className="bg-violet-100 text-violet-500 p-1 rounded-lg sm:w-9 sm:h-9 w-7 h-7"
+                // size={35}
+              />
+            </div>
           </div>
         </div>
       </section>
