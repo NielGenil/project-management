@@ -14,6 +14,7 @@ import {
   CircleUserRound,
   Folder,
   House,
+  LayoutDashboard,
   ListTodo,
   LogOut,
   Menu,
@@ -85,8 +86,18 @@ function App() {
 
   return (
     <main className="w-screen h-screen flex text-gray-700">
+      {sidebar && (
+        <div
+          className="fixed inset-0 bg-black/30 z-10 sm:hidden"
+          onClick={() => {
+            setSidebar(false);
+            setOpen(false);
+          }}
+        />
+      )}
+
       <aside
-        className="relative flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden shrink-0"
+        className="fixed sm:relative flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden shrink-0 h-full z-20"
         style={{ width: sidebar ? "300px" : "56px" }}
       >
         {/* Header */}
@@ -135,9 +146,9 @@ function App() {
               <div className={`${sidebar ? "mx-5" : ""} flex flex-col gap-3`}>
                 <Link
                   to={"/"}
-                  className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
+                  className="flex items-center gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
                 >
-                  <House
+                  <LayoutDashboard
                     size={17}
                     className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
                   />
@@ -150,7 +161,7 @@ function App() {
 
                 <Link
                   to={"/projects"}
-                  className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
+                  className="flex items-center gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
                 >
                   <Folder
                     size={17}
@@ -162,7 +173,7 @@ function App() {
                     </span>
                   )}
                 </Link>
-                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
                   <Calendar
                     size={17}
                     className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
@@ -173,7 +184,20 @@ function App() {
                     </span>
                   )}
                 </button>
-                <div className="flex flex-col  gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+
+                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+                  <ChartColumnDecreasing
+                    size={17}
+                    className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
+                  />
+                  {sidebar && (
+                    <span className="whitespace-nowrap font-medium">
+                      Analytics
+                    </span>
+                  )}
+                </button>
+
+                <div className="flex flex-col  gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
                   <div
                     onClick={() => {
                       setSidebar(true);
@@ -212,8 +236,14 @@ function App() {
                   </div>
                 </div>
 
-                {open && (
-                  <div className="transition">
+                <div
+                  className={`grid transition-all duration-300 ease-in-out ${
+                    open
+                      ? "grid-rows-[1fr] opacity-100"
+                      : "grid-rows-[0fr] opacity-0"
+                  }`}
+                >
+                  <div className="overflow-hidden">
                     {unreadCount > 0 && (
                       <div
                         onClick={markAllRead}
@@ -258,19 +288,7 @@ function App() {
                       </ul>
                     )}
                   </div>
-                )}
-
-                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
-                  <ChartColumnDecreasing
-                    size={17}
-                    className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
-                  />
-                  {sidebar && (
-                    <span className="whitespace-nowrap font-medium">
-                      Analytics
-                    </span>
-                  )}
-                </button>
+                </div>
               </div>
             </div>
 
@@ -282,7 +300,7 @@ function App() {
                 </span>
               )}
               <div className={`${sidebar ? "mx-5" : ""} flex flex-col gap-3`}>
-                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
                   <Settings
                     size={17}
                     className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
@@ -301,7 +319,7 @@ function App() {
           <div className="px-2">
             <button
               onClick={logoutSubmit}
-              className="flex items-center gap-3 w-full px-2 py-2 rounded-lg text-sm text-red-500 hover:bg-red-50 transition-colors"
+              className="flex items-center gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-red-500 hover:bg-red-50 transition-colors"
             >
               <LogOut size={17} className="shrink-0" />
               {sidebar && (
@@ -312,7 +330,11 @@ function App() {
         </div>
       </aside>
 
-      <section className="flex-1 overflow-auto p-2 sm:p-10 text-sm">
+      <div className="hidden sm:block shrink-0 transition-all duration-300" />
+
+      <section
+        className={`flex-1 overflow-auto p-2 sm:p-10 text-sm ${sidebar ? "ml-14 sm:ml-0" : "ml-14 sm:ml-0"}`}
+      >
         <Outlet />
       </section>
 

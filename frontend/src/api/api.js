@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const BASE_URL = `http://${window.location.hostname}:8001`
+export const BASE_URL = `http://${window.location.hostname}:8000`
 
 let tokenInvalidCallback = null;
 export const setTokenInvalidCallback = (callback) => {

@@ -47,9 +47,18 @@ class TaskEditSerializer(serializers.ModelSerializer):
 
 class TaskProjectSerializer(serializers.ModelSerializer):
     task_assign_user = CustomUserSerializer()
+    created_by = CustomUserSerializer()
     class Meta:
         model = Task
         fields = ['id', 'task_name', 'task_description', 'task_assign_user', 'task_priority', 'task_status', 'task_due', 'created_at', 'created_by']
+        depth = 1
+
+class TaskUserSerializer(serializers.ModelSerializer):
+    task_assign_user = CustomUserSerializer()
+    created_by = CustomUserSerializer()
+    class Meta:
+        model = Task
+        fields = ['id', 'task_assign_user', 'project', 'task_name', 'task_description', 'task_priority', 'task_status', 'task_due', 'created_at', 'created_by']
         depth = 1
 
 class ProjectWithTasksSerializer(serializers.ModelSerializer):

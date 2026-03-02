@@ -33,7 +33,7 @@ export default function ProjectTable() {
   });
 
   return (
-    <main className="w-full h-full">
+    <main className="w-full h-full sm:text-sm text-xs">
       <div className="mb-2 w-full flex-row-reverse flex">
         <select
           name=""
@@ -53,10 +53,10 @@ export default function ProjectTable() {
         <table className="w-full">
           <thead>
             <tr className="text-left uppercase text-xs text-gray-500">
-              <th className="px-2 py-3">Title</th>
-              <th className="px-2 py-3">Status</th>
-              <th className="px-2 py-3">Start</th>
-              <th className="px-2 py-3">End</th>
+              <th className="px-2 py-3 min-w-[150px] sm:text-sm text-[10px]">Title</th>
+              <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Status</th>
+              <th className="px-2 py-3 min-w-[150px] sm:text-sm text-[10px]">Start</th>
+              <th className="px-2 py-3 min-w-[150px] sm:text-sm text-[10px]">End</th>
             </tr>
           </thead>
 
@@ -69,8 +69,8 @@ export default function ProjectTable() {
                 }}
                 className="border-t border-gray-200 text-sm"
               >
-                <td className="px-2 py-3">{project.project_name}</td>
-                <td className="px-2 py-3">
+                <td className="px-2 py-3 sm:text-sm text-xs">{project.project_name}</td>
+                <td className="px-2 py-3 sm:text-sm text-xs">
                   <span className="flex gap-2 items-center">
                     {project.project_status === "Active" ? (
                       <RefreshCcw
@@ -98,13 +98,13 @@ export default function ProjectTable() {
                     {project.project_status}
                   </span>
                 </td>
-                <td className="px-2 py-3">
+                <td className="px-2 py-3 sm:text-sm text-xs">
                   <span className="flex gap-2 items-center">
                     <CalendarCheck className="text-gray-500" size={18} />
                     {formatDate(project.project_start)}
                   </span>
                 </td>
-                <td className="px-2 py-3">
+                <td className="px-2 py-3 sm:text-sm text-xs">
                   <span className="flex gap-2 items-center">
                     <CalendarMinus2 className="text-gray-500" size={18} />
                     {formatDate(project.project_end)}

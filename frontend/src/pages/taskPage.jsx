@@ -96,9 +96,9 @@ export default function TaskPage() {
             {isTeamLeader && (
               <button
                 onClick={() => setAddTaskModal(true)}
-                className="bg-blue-500 text-white p-2 rounded-md flex gap-2 justify-center items-center"
+                className="bg-blue-500 text-white p-2 rounded-md flex gap-2 justify-center items-center text-xs sm:text-sm"
               >
-                <FolderPlus className="text-white" size={18} /> Create Task
+                <FolderPlus className="text-white sm:w-5 sm:h-5 w-4 h-4" /> Create Task
               </button>
             )}
           </div>
@@ -116,7 +116,6 @@ export default function TaskPage() {
             <div>
               <BookType
                 className="bg-yellow-100 text-yellow-500 p-1 rounded-lg sm:w-9 sm:h-9 w-7 h-7"
-                // size={35}
               />
             </div>
           </div>
@@ -129,7 +128,6 @@ export default function TaskPage() {
             <div>
               <ActivityIcon
                 className="bg-green-100 text-green-500 p-1 rounded-lg sm:w-9 sm:h-9 w-7 h-7"
-                // size={35}
               />
             </div>
           </div>

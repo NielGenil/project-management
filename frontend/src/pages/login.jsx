@@ -1,6 +1,6 @@
 import { LockKeyhole, Mail } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginAPI } from "../api/api";
 import Cookies from "js-cookie";
@@ -10,6 +10,8 @@ function LoginPage() {
   const loginRef = useRef();
   const navigate = useNavigate();
   const { isAuthenticated } = useHelper();
+
+  const [errorShow, setErrorShow] = useState(false);
 
   const { mutate: login } = useMutation({
     mutationFn: (loginData) => loginAPI(loginData),
@@ -25,7 +27,7 @@ function LoginPage() {
     },
 
     onError: (error) => {
-      console.error("Error", error);
+      setErrorShow(error.detail)
     },
   });
 
@@ -102,6 +104,12 @@ function LoginPage() {
               </div>
             </div>
           </section>
+
+          {errorShow && (
+            <p className="p-3 bg-red-100 text-red-600 text-sm rounded-lg border border-red-300">
+              {errorShow}.
+            </p>
+          )}
 
           <section className="flex justify-center items-center">
             <button

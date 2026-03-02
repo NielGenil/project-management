@@ -41,7 +41,7 @@ export default function TaskTable() {
   const [selectedTasksIds, setSelectedTasksIds] = useState([]);
   const [deleteTaskModal, setDeleteTaskModal] = useState(false);
 
-  const { data: taskList, isLoading  } = useQuery({
+  const { data: taskList  } = useQuery({
     queryKey: ["task-list", projectId],
     queryFn: () => getTaskDataAPI(token, projectId),
     enabled: !!projectId,
@@ -121,7 +121,7 @@ export default function TaskTable() {
       <div className="flex justify-between items-center mb-2 gap-2 flex-wrap">
         <div className="flex items-center">
           <button className="flex gap-2 items-center p-1.5 border border-gray-300 border-r-0 rounded-l-md bg-blue-500 text-white">
-            <Clipboard size={18} className="text-white" />
+            <Clipboard className="text-white sm:w-5 sm:h-5 w-4 h-4" />
             Task
           </button>
 
@@ -129,7 +129,7 @@ export default function TaskTable() {
             onClick={() => navigate(`/project/tasks/${projectId}/settings`)}
             className="flex gap-2 items-center p-1.5 border border-gray-300 rounded-r-md text-gray-700"
           >
-            <Settings size={18} className="text-gray-700" />
+            <Settings className="text-gray-700 sm:w-5 sm:h-5 w-4 h-4" />
             Settings
           </button>
         </div>
@@ -198,9 +198,9 @@ export default function TaskTable() {
             {isTeamLeader && selectedTasksIds.length > 0 && (
               <button
                 onClick={() => setDeleteTaskModal(true)}
-                className="flex items-center gap-2 bg-red-500 text-white px-3 py-1.5 rounded-lg text-sm"
+                className="flex items-center gap-2 bg-red-500 text-white px-3 py-1.5 rounded-lg sm:text-sm text-xs"
               >
-                <Trash size={16} />
+                <Trash className="sm:w-5 sm:h-5 w-4 h-4" />
                 Delete ({selectedTasksIds.length})
               </button>
             )}
@@ -236,10 +236,10 @@ export default function TaskTable() {
                 )}
                 Tasks
               </th>
-              <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Assigned User</th>
+              <th className="px-2 py-3 min-w-[150px] sm:text-sm text-[10px]">Assigned User</th>
               <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Status</th>
               <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Priority</th>
-              <th className="px-2 py-3 min-w-[100px] sm:text-sm text-[10px]">Due Date</th>
+              <th className="px-2 py-3 min-w-[150px] sm:text-sm text-[10px]">Due Date</th>
             </tr>
           </thead>
           <tbody className="w-full">

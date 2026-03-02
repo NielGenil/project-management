@@ -70,6 +70,9 @@ class ProjectPermission(BasePermission):
         if membership.role == "Member":
 
             # Member can only view
+            if request.method == "PATCH" and isinstance(obj, Task):
+                return True
+            
             return request.method in SAFE_METHODS
 
 

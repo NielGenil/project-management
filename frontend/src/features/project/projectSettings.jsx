@@ -198,7 +198,7 @@ export default function ProjectSettings() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <main className="w-full h-full">
+    <main className="w-full h-full text-xs sm:text-sm">
       <div className="flex sm:justify-between items-center mb-2">
         <div className="flex w-full items-center">
           <button
@@ -428,6 +428,7 @@ export default function ProjectSettings() {
                 name="project_name"
                 defaultValue={project?.project_name}
                 className="p-2 border-gray-300 border rounded-md w-full"
+                required
               />
             </div>
             <div className="flex gap-2 flex-col">
@@ -472,6 +473,7 @@ export default function ProjectSettings() {
                   name="project_start"
                   defaultValue={project?.project_start}
                   className="p-2 border-gray-300 border rounded-md w-full"
+                  required
                 />
               </div>
               <div className="flex-1 flex flex-col gap-2">
@@ -484,6 +486,7 @@ export default function ProjectSettings() {
                   name="project_end"
                   defaultValue={project?.project_end}
                   className="p-2 border-gray-300 border rounded-md w-full"
+                  required
                 />
               </div>
             </div>
@@ -536,7 +539,7 @@ export default function ProjectSettings() {
           <div className="bg-white p-4 rounded-md shadow-2xl w-full max-w-lg">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-              <h1 className="font-bold text-xl">Add Members</h1>
+              <h1 className="font-bold sm:text-xl text-lg">Add Members</h1>
             </div>
 
             <form
@@ -545,7 +548,7 @@ export default function ProjectSettings() {
               className="w-full flex flex-col gap-5"
             >
               <div className="flex flex-col gap-4">
-                <p className="text-sm text-gray-600">
+                <p className="sm:text-sm text-xs text-gray-600">
                   Note: Select users and assign roles before adding them to the
                   project.
                 </p>
@@ -620,7 +623,7 @@ export default function ProjectSettings() {
           <div className="bg-white p-4 rounded-md shadow-2xl w-full max-w-md">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-              <h1 className="font-bold text-xl">Remove User</h1>
+              <h1 className="font-bold sm:text-xl text-lg">Remove User</h1>
             </div>
 
             <form
@@ -657,7 +660,7 @@ export default function ProjectSettings() {
           <div className="bg-white p-4 rounded-md shadow-2xl w-full max-w-md">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-              <h1 className="font-bold text-xl">Delete Project</h1>
+              <h1 className="font-bold sm:text-xl text-lg">Delete Project</h1>
             </div>
 
             <form

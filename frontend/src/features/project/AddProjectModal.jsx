@@ -43,11 +43,11 @@ export default function AddProjectModal({ onClose }) {
   };
 
   return (
-    <main className="fixed z-50 bg-black/20 inset-0 flex justify-center items-center p-4">
+    <main className="fixed z-50 bg-black/20 inset-0 flex justify-center items-center p-4 text-xs sm:text-sm">
       <div className="bg-white p-4 rounded-md shadow-2xl w-full max-w-lg">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h1 className="font-bold text-xl">Create New Project</h1>
+          <h1 className="font-bold sm:text-xl text-lg">Create New Project</h1>
         </div>
 
         <form
@@ -69,6 +69,7 @@ export default function AddProjectModal({ onClose }) {
                 name="project_name"
                 placeholder="Project Name"
                 className="p-2 border-gray-300 border rounded-md w-full"
+                required
               />
             </div>
 
@@ -87,6 +88,7 @@ export default function AddProjectModal({ onClose }) {
                   type="date"
                   name="project_start"
                   className="p-2 border border-gray-300 rounded-md w-full"
+                  required
                 />
               </div>
 
@@ -96,6 +98,7 @@ export default function AddProjectModal({ onClose }) {
                   type="date"
                   name="project_end"
                   className="p-2 border border-gray-300 rounded-md w-full"
+                  required
                 />
               </div>
             </div>

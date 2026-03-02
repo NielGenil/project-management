@@ -253,3 +253,17 @@ export const deleteTaskAPI = async (token, ids) => {
 
   return;
 };
+
+export const getUserTaskAPI = async (token) => {
+  const response = await fetch(`${BASE_URL}/api/user-task-list/`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw await response.json();
+  }
+
+  return await response.json();
+};
