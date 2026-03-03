@@ -58,6 +58,7 @@ The project uses environment-based database configuration.
 DEV_MODE = False
 
 if DEV_MODE:
+    # Dev (if no other database)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -65,14 +66,15 @@ if DEV_MODE:
         }
     }
 else:
+    # Production
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'project-management',
-            'USER': 'pmAdmin',
-            'PASSWORD': 'pmAdmin_30',
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'NAME': os.getenv("DB_NAME"),
+            'USER': os.getenv("DB_USER"),
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+            'HOST': os.getenv("DB_HOST"),
+            'PORT': os.getenv("DB_PORT"),
         }
     }
 ```
