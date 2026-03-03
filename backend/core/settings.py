@@ -15,6 +15,11 @@ from pathlib import Path
 from datetime import timedelta
 import socket
 
+# Generate SECRET_KEY
+# from django.core.management.utils import get_random_secret_key
+# print(get_random_secret_key())
+
+
 def get_lan_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:

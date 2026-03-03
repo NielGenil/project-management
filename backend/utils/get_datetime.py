@@ -30,12 +30,12 @@ def sync_with_ntp_servers(servers=None, timeout=3):
         try:
             response = client.request(server, version=3, timeout=timeout)
             TIME_OFFSET = response.tx_time - time.time()
-            print(Fore.GREEN + f"[TIME] Synced with {server}, offset={TIME_OFFSET:.3f}s")
+            # print(Fore.GREEN + f"[TIME] Synced with {server}, offset={TIME_OFFSET:.3f}s")
             return True
         except Exception:
             continue
 
-    print(Fore.RED + "[TIME] Failed to sync with NTP servers. Using system clock.")
+    # print(Fore.RED + "[TIME] Failed to sync with NTP servers. Using system clock.")
     TIME_OFFSET = 0.0
     return False
 

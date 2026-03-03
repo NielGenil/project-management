@@ -9,13 +9,13 @@ User = get_user_model()
 
 @database_sync_to_async
 def get_user_from_token(token_str):
-    print("TOKEN:", token_str)
+    # print("TOKEN:", token_str)
     try:
         token = AccessToken(token_str)
-        print("TOKEN PAYLOAD:", token.payload)
+        # print("TOKEN PAYLOAD:", token.payload)
         return User.objects.get(id=token["user_id"])
     except Exception as e:
-        print("JWT ERROR:", e)
+        # print("JWT ERROR:", e)
         return AnonymousUser()
 
 
