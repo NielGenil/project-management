@@ -14,10 +14,12 @@ import ProjectTable from "../features/project/ProjectTable";
 import { getAllProjectAPI } from "../api/projectAPI";
 import { useHelper } from "../hooks/useHelper";
 import { useQuery } from "@tanstack/react-query";
+import { usePermission } from "../hooks/usePermission";
 
 export default function ProjectPage() {
   const { token } = useHelper();
   const [addProjectModal, setAddProjectModal] = useState(false);
+  const { isAdmin } = usePermission();
 
   const { data: projectList } = useQuery({
     queryKey: ["project-list"],
@@ -54,14 +56,17 @@ export default function ProjectPage() {
           </div>
 
           <div className="w-full flex flex-row-reverse">
-            <button
-              onClick={() => {
-                setAddProjectModal(true);
-              }}
-              className="bg-blue-500 text-white p-2 rounded-md flex gap-2 justify-center items-center text-xs sm:text-sm"
-            >
-              <FolderPlus className="text-white sm:w-5 sm:h-5 w-4 h-4" /> Create Project
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  setAddProjectModal(true);
+                }}
+                className="bg-blue-500 text-white p-2 rounded-md flex gap-2 justify-center items-center text-xs sm:text-sm"
+              >
+                <FolderPlus className="text-white sm:w-5 sm:h-5 w-4 h-4" />{" "}
+                Create Project
+              </button>
+            )}
           </div>
         </div>
       </section>

@@ -14,6 +14,7 @@ import {
   CalendarCheck,
   CalendarClock,
   ClipboardCheck,
+  ClipboardList,
   FolderOpen,
   Layers,
   Layers2,
@@ -136,7 +137,7 @@ export default function DashboardPage() {
               <h1 className="sm:text-2xl text:lg font-semibold">{taskCount}</h1>
             </div>
             <div>
-              <BookType className="bg-yellow-100 text-yellow-500 p-1 rounded-lg sm:w-9 sm:h-9 w-7 h-7" />
+              <ClipboardList className="bg-orange-100 text-orange-500 p-1 rounded-lg sm:w-9 sm:h-9 w-7 h-7" />
             </div>
           </div>
           <div className="flex w-full sm:flex-1 sm:h-[90px] h-[50px] justify-between items-center border-gray-300 rounded-md border sm:p-4 p-1">
