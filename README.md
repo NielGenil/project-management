@@ -102,9 +102,9 @@ WebSocket is used for:
 Architecture:
 
 React (Frontend)
-↓
+→
 Django REST API + WebSocket (ASGI)
-↓
+→
 PostgreSQL Database
 
 ---
