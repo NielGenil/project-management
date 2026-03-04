@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const BASE_URL = `http://${window.location.hostname}:8000`
+export const BASE_URL = `http://${window.location.hostname}:8000`;
 
 let tokenInvalidCallback = null;
 export const setTokenInvalidCallback = (callback) => {
@@ -23,7 +23,7 @@ api.interceptors.response.use(
       tokenInvalidCallback();
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export const loginAPI = async (formData) => {
@@ -39,4 +39,37 @@ export const loginAPI = async (formData) => {
   }
   console.log(response);
   return response.json();
+};
+
+export const inviteUserAPI = async (token, formData) => {
+  const response = await fetch(`${BASE_URL}/api/invite-user/`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+  if (!response.ok) {
+    throw await response.json();
+  }
+
+  return await response.json();
+};
+
+export const changePasswordAPI = async (token, formData) => {
+  const response = await fetch(`${BASE_URL}/api/change-password/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(formData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw errorData;
+  }
+
+  return await response.json();
 };

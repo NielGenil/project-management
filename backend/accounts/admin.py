@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser
+from .models import CustomUser, InvitationToken
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
@@ -8,3 +8,4 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('first_name', 'last_name', 'email')
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(InvitationToken)

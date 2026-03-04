@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { loginAPI } from "../api/api";
 import Cookies from "js-cookie";
 import { useHelper } from "../hooks/useHelper";
+import toast from "react-hot-toast";
+import ToasterNotif from "../components/Toaster";
 
 function LoginPage() {
   const loginRef = useRef();
   const navigate = useNavigate();
   const { isAuthenticated } = useHelper();
 
-  const [errorShow, setErrorShow] = useState(false);
-
-  const { mutate: login } = useMutation({
+  const { mutate: login, isPending } = useMutation({
     mutationFn: (loginData) => loginAPI(loginData),
 
     onSuccess: (data) => {
@@ -27,7 +27,7 @@ function LoginPage() {
     },
 
     onError: (error) => {
-      setErrorShow(error.detail)
+      toast.error(error.detail);
     },
   });
 
@@ -49,78 +49,85 @@ function LoginPage() {
   };
 
   return (
-    <main className="flex w-screen h-screen justify-center items-center bg-slate-100">
-      <div className="bg-white flex shadow-lg h-[60vh] w-[60vw]">
+    <main className="flex w-screen h-screen justify-center items-center p-2 sm:p-0 bg-gray-100">
+      <div className="bg-white flex shadow-lg sm:h-[60vh] sm:w-[60vw]">
         {/* SECTION 1 */}
-        <div className="hidden md:flex flex-1 bg-[url('/image/13077.jpg')] bg-cover bg-center items-center text-white">
-          <div className="m-4 flex flex-col gap-4 max-w-[350px]">
-            <h1 className="text-4xl font-semibold">Welcome to Website</h1>
-            <p>
-              This is a demo website created to showcase the project design and
-              functionality.
-            </p>
-          </div>
-        </div>
+        <div className=" flex flex-1 bg-[url('/image/bg.png')] bg-cover bg-center items-center text-white"></div>
 
         {/* SECTION 2 */}
         <form
           ref={loginRef}
           onSubmit={loginSubmit}
-          className="flex flex-col md:max-w-[400px] p-7 gap-6 justify-center items-center w-full"
+          className="flex flex-col lg:max-w-[400px] sm:py-20 p-7 gap-6 justify-between items-center w-full text-xs sm:text-sm"
         >
-          <section className="flex justify-center items-center">
-            <h1 className="text-violet-950 text-2xl">User Login</h1>
+          <section className="flex flex-col gap-2 w-full">
+            <h1 className="text-gray-800 font-semibold sm:text-2xl text-xl">
+              Login
+            </h1>
+
+            <p className="text-gray-500 max-w-md leading-relaxed">
+              Organize your work, stay on schedule, and collaborate with your
+              team in one unified workspace.
+            </p>
           </section>
 
           <section className="flex flex-col gap-4 w-full">
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 text-violet-950">
-                <Mail size={18} />
-              </span>
-
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your emial"
-                className="border border-gray-300 p-2 rounded-lg w-full pl-10 focus:outline-none bg-indigo-950/10 focus:outline-none focus:ring-2 focus:ring-indigo-950"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex gap-2 flex-col">
+              <div className="flex gap-2 text-gray-500 font-semibold items-center">
+                <p className="text-xs">E-MAIL</p>
+              </div>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 text-violet-950">
-                  <LockKeyhole size={18} />
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700">
+                  <Mail size={18} className="text-blue-500" />
                 </span>
 
                 <input
-                  type="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  className="border border-gray-300 p-2 rounded-lg w-full pl-10 focus:outline-none bg-indigo-950/10 focus:outline-none focus:ring-2 focus:ring-indigo-950"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your emial"
+                  className="border border-gray-300 p-2 rounded-sm w-full pl-10 focus:outline-none focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1 w-full">
+              <div className="flex gap-2 flex-col">
+                <div className="flex gap-2 text-gray-500 font-semibold items-center">
+                  <p className="text-xs">PASSWORD</p>
+                </div>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700">
+                    <LockKeyhole size={18} className="text-blue-500" />
+                  </span>
+
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    className="border border-gray-300 p-2 rounded-sm w-full pl-10 focus:outline-none focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
               </div>
               <div className="flex flex-row-reverse">
                 <p className="text-blue-400">Forgot password?</p>
               </div>
             </div>
-          </section>
-
-          {errorShow && (
-            <p className="p-3 bg-red-100 text-red-600 text-sm rounded-lg border border-red-300">
-              {errorShow}.
-            </p>
-          )}
-
-          <section className="flex justify-center items-center">
-            <button
-              className="bg-linear-to-bl from-indigo-700 to-violet-950 text-white px-4 py-2 rounded"
-              type="submit"
-            >
-              Login
-            </button>
+            <section className="flex justify-center items-center w-full">
+              <button
+                className={`text-white px-4 py-3 flex gap-2 items-center justify-center rounded w-full ${isPending ? "bg-gray-300 " : "bg-blue-500 "}`}
+                type="submit"
+                disabled={isPending}
+              >
+                {isPending && (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                )}
+                {isPending ? "Logging in..." : "Login"}
+              </button>
+            </section>
           </section>
         </form>
       </div>
+      <ToasterNotif />
     </main>
   );
 }

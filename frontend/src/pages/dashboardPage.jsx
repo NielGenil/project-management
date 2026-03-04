@@ -25,13 +25,11 @@ import {
   User,
 } from "lucide-react";
 import { usePermission } from "../hooks/usePermission";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 export default function DashboardPage() {
   const { token, formatDate } = useHelper();
   const { isAdmin } = usePermission();
-
-  const [allTasks, setAllTasks] = useState([]);
 
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
@@ -57,11 +55,8 @@ export default function DashboardPage() {
     queryFn: () => getAllUserAPI(token),
   });
 
-  useEffect(() => {
-    const flattenedTasks =
-      userTask?.flatMap((user) => user.task_assign || []) || [];
-
-    setAllTasks(flattenedTasks);
+  const allTasks = useMemo(() => {
+    return userTask?.flatMap((user) => user.task_assign || []) || [];
   }, [userTask]);
 
   const projectListData = Array.isArray(projectList) ? projectList : [];
@@ -102,7 +97,7 @@ export default function DashboardPage() {
   });
 
   return (
-    <main className="w-full h-full flex flex-col text-xs sm:text-sm gap-5 sm:gap-10 overflow-hidden overflow-y-auto">
+    <main className="w-full h-full flex flex-col text-xs sm:text-sm gap-5 sm:gap-10 overflow-hidden overflow-y-auto p-2 sm:py-10  sm:pl-20 sm:pr-10">
       <section className="w-full">
         <div className="flex sm:flex-row flex-col flex-1 justify-between items-center gap-4">
           <div className="w-full">
@@ -154,8 +149,8 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <div className="flex flex-col sm:flex-row gap-5 justify-between sm:overflow-hidden">
-        <div className="flex flex-1 flex-col gap-4 overflow-hidden overflow-x-auto overflow-y-auto max-h-[500px] sm:max-h-none">
+      <div className="flex flex-col xl:flex-row gap-5 justify-between xl:overflow-hidden flex-col-reverse w-full">
+        <div className="flex flex-1 flex-col gap-4 overflow-hidden overflow-x-auto overflow-y-auto max-h-[500px] xl:max-h-none">
           <div className="flex justify-between items-center flex-wrap gap-2">
             <h1 className="text-md sm:text-lg font-semibold flex gap-2 items-center">
               <ListTodo className="sm:w-5 sm:h-5 w-4 h-4" /> Project and Tasks
@@ -270,7 +265,7 @@ export default function DashboardPage() {
                 ) : (
                   filteredTasks.map((task) => (
                     <tr
-                      key={`${user.id}-${task.id}`}
+                      key={task.id}
                       className="border-t border-gray-200 text-sm"
                     >
                       <td className="px-2 py-3 sm:text-sm text-xs">
@@ -350,8 +345,8 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 sm:w-[400px] w-full">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col xl:flex-col justify-between sm:flex-row gap-2 xl:w-[400px] w-full">
+          <div className="flex flex-1 flex-col gap-4">
             <h1 className="text-md sm:text-lg font-semibold flex gap-2 items-center ">
               <AlignEndVertical className="sm:w-5 sm:h-5 w-4 h-4" />
               Completion
@@ -407,7 +402,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 overflow-hidden">
+          <div className="flex flex-1 flex-col gap-4 overflow-hidden">
             <h1 className="text-md sm:text-lg font-semibold flex gap-2 items-center">
               <CalendarClock className="sm:w-5 sm:h-5 w-4 h-4" />
               Incoming Overdue

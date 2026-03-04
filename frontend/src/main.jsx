@@ -10,6 +10,7 @@ import DashboardPage from "./pages/dashboardPage.jsx";
 import TaskPage from "./pages/taskPage.jsx";
 import TaskTable from "./features/task/taskTable.jsx";
 import ProjectSettings from "./features/project/projectSettings.jsx";
+import SettingsPage from "./pages/settingsPage.jsx";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
             element: <ProjectSettings />,
           },
         ],
+      },
+      {
+        path: "/settings",
+        element: <SettingsPage />,
       },
     ],
   },
