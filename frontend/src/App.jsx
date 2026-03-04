@@ -41,7 +41,7 @@ function App() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) {
+      if (window.innerWidth < 1281) {
         setSidebar(false);
         setOpen(false);
       } else {
@@ -88,7 +88,7 @@ function App() {
     <main className="w-screen h-screen flex text-gray-700">
       {sidebar && (
         <div
-          className="fixed inset-0 bg-black/30 z-10 sm:hidden"
+          className="fixed inset-0 bg-black/30 z-10 xl:hidden"
           onClick={() => {
             setSidebar(false);
             setOpen(false);
@@ -97,7 +97,7 @@ function App() {
       )}
 
       <aside
-        className="fixed sm:relative flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden shrink-0 h-full z-20"
+        className="fixed xl:relative flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden shrink-0 h-full z-20"
         style={{ width: sidebar ? "300px" : "56px" }}
       >
         {/* Header */}
@@ -257,7 +257,7 @@ function App() {
                     )}
 
                     {notifications.length === 0 ? (
-                      <p className="flex justify-center p-5 items-center text-gray-700 font-semibold">
+                      <p className="flex justify-center text-xs sm:text-sm p-5 items-center text-gray-400 font-semibold">
                         No notifications
                       </p>
                     ) : (
@@ -300,7 +300,10 @@ function App() {
                 </span>
               )}
               <div className={`${sidebar ? "mx-5" : ""} flex flex-col gap-3`}>
-                <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group">
+                <Link
+                  to={"/settings"}
+                  className="flex items-center gap-3 w-full px-2 py-2 rounded-lg sm:text-sm text-xs text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors group"
+                >
                   <Settings
                     size={17}
                     className="shrink-0 text-gray-500 group-hover:text-gray-700 transition-colors"
@@ -310,7 +313,7 @@ function App() {
                       Settings
                     </span>
                   )}
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -333,7 +336,7 @@ function App() {
       <div className="hidden sm:block shrink-0 transition-all duration-300" />
 
       <section
-        className={`flex-1 overflow-auto p-2 sm:p-10 text-sm ${sidebar ? "ml-14 sm:ml-0" : "ml-14 sm:ml-0"}`}
+        className={`flex-1 overflow-auto text-sm ${sidebar ? "ml-14 sm:ml-0" : "ml-14 sm:ml-0"}`}
       >
         <Outlet />
       </section>

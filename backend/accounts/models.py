@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import uuid
+from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
@@ -15,3 +18,13 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+class InvitationToken(models.Model):
+    email = models.EmailField()
+    token = models.CharField(max_length=100, unique=True)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Invitation for {self.email}"

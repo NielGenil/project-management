@@ -10,7 +10,23 @@ export const getCurrentUserAPI = async (token) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch gender data");
+    throw await response.json();
+  }
+
+  return await response.json();
+};
+
+export const updateCurrentUserAPI = async (token, formData) => {
+  const response = await fetch(`${BASE_URL}/api/current-user/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw await response.json();
   }
 
   return await response.json();
@@ -154,11 +170,10 @@ export const removeProjectMemberAPI = async (token, id) => {
     },
   });
 
- if (!response.ok) {
+  if (!response.ok) {
     const errorData = await response.json();
     throw errorData;
   }
-
 
   return true;
 };

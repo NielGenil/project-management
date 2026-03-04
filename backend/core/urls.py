@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from accounts.views import UserList, CurrentUserView, UserListWithTask
+from accounts.views import UserList, CurrentUserView, UserListWithTask, InviteUser, InvitationRespondView, ChangePasswordView
 
 from projects.views import ProjectList, ProjectCreate, ProjectRetriveUpdateDestroy, ProjectStatusChoicesView, TaskCreate, TaskRetriveUpdateDestroy, TaskChoicesView, ProjectWithTaskList, TaskBulkDelete, ProjectMemberRolesChoicesView, ProjectMemberCreate, ProjectMemberRetriveUpdateDestroy, ProjectWithMemberList
 
@@ -37,7 +37,12 @@ urlpatterns = [
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
+    path('api/invite-user/', InviteUser.as_view()),
+    path('api/invite/respond/', InvitationRespondView.as_view()),
+
     path('api/current-user/', CurrentUserView.as_view()),
+
+    path("api/change-password/", ChangePasswordView.as_view(), name="change-password"),
 
     path('api/user-task-list/', UserListWithTask.as_view(), name='user-task-list'),
 

@@ -66,7 +66,7 @@ export default function TaskPage() {
   ).length;
 
   return (
-    <main className="flex flex-col sm:gap-10 gap-5 sm:px-10">
+    <main className="flex flex-col sm:gap-10 gap-5 overflow-hidden overflow-y-auto p-2 sm:py-10  sm:pl-20 sm:pr-10">
       {/* first section */}
       <section className="w-full">
         <div className="flex sm:flex-row flex-col flex-1 justify-between items-center gap-4">

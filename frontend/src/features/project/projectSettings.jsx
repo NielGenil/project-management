@@ -215,7 +215,7 @@ export default function ProjectSettings() {
         </div>
       </div>
       <div className="flex md:flex-row flex-col gap-8 ">
-        <div className="border border-gray-300 sm:max-w-[500px] w-full rounded-md p-7 flex flex-col gap-4">
+        <div className="border border-gray-300 sm:max-w-[500px] w-full rounded-md sm:p-7 p-2 py-4 flex flex-col gap-4">
           <div className="flex justify-between w-full">
             <h1 className="font-semibold text-lg">Project Settings</h1>
           </div>
@@ -254,7 +254,7 @@ export default function ProjectSettings() {
           <form
             onSubmit={updateProject}
             ref={editProjectRef}
-            className="border border-gray-300 w-full rounded-md p-7 flex flex-col gap-4"
+            className="border border-gray-300 w-full rounded-md sm:p-7 p-2 py-4 flex flex-col gap-4"
           >
             <div>
               <h1 className="font-semibold text-lg">Project Details</h1>
@@ -347,7 +347,7 @@ export default function ProjectSettings() {
         )}
 
         {settingsDisplay === "project-members" && (
-          <div className="border border-gray-300  w-full rounded-md p-7 flex flex-col gap-4">
+          <div className="border border-gray-300  w-full rounded-md sm:p-7 p-2 py-4 flex flex-col gap-4">
             <div className="flex justify-between w-full">
               <h1 className="font-semibold text-lg">Project Members</h1>
               {isTeamLeader && (
@@ -379,7 +379,7 @@ export default function ProjectSettings() {
               {filteredMember?.map((user) => (
                 <div
                   key={user.id}
-                  className="flex justify-between items-center mb-2"
+                  className="flex justify-between gap-2 items-center mb-2"
                 >
                   <span className="flex gap-3 items-center">
                     <User
@@ -389,8 +389,10 @@ export default function ProjectSettings() {
                     <p className="text-gray-700 font-semibold">{user?.user?.username}</p>
                     {user?.role === "Team Leader" && (
                       <p className="p-0.5 px-4 text-gray-700 flex gap-2 font-semibold border border-gray-300 rounded-md">
-                        {user?.role}
+                        <span className="hidden sm:block">{user?.role}</span>
+                       <span className="sm:hidden block">TL</span>
                       </p>
+                      
                     )}
                   </span>
                   {isTeamLeader && (
@@ -413,7 +415,7 @@ export default function ProjectSettings() {
           <form
             onSubmit={updateProject}
             ref={editProjectRef}
-            className="border border-gray-300 w-full rounded-md p-7 flex flex-col gap-4"
+            className="border border-gray-300 w-full rounded-md sm:p-7 p-2 py-4 flex flex-col gap-4"
           >
             <div>
               <h1 className="font-semibold text-lg">Edit Project Details</h1>
