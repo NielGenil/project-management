@@ -7,7 +7,6 @@ import string
 import secrets
 from django.utils import timezone
 from datetime import timedelta
-from core.settings import local_ip
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -42,7 +41,7 @@ class RegisterSerializer(serializers.Serializer):
         from_email = os.getenv("EMAIL_HOST_USER")
         to = [email]
 
-        base_url = f"http://{local_ip}:8000"  # Change to your backend URL
+        base_url = os.getenv("BACKEND_BASE_URL")  # Change to your backend URL
         accept_url = f"{base_url}/api/invite/respond/?token={token}&action=accept"
         decline_url = f"{base_url}/api/invite/respond/?token={token}&action=decline"
 
